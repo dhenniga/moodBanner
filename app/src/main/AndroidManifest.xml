@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.moodbanner.dev.moodbanner">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +15,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -19,10 +22,7 @@
         <activity android:name=".EditExisting" />
         <activity android:name=".Gallery" />
         <activity android:name=".Menubar" />
-        <activity
-            android:name=".CreateStage"
-            android:label="@string/title_activity_create_stage"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".RecyclerActivityBackground" />
     </application>
 
 </manifest>

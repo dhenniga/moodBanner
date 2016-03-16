@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="button_transparent_black">#33000000</color>
+    <color name="create_new_gradient_background_top">#f8f8f8</color>
+    <color name="create_new_gradient_background_bottom">#d6d6d6</color>
 </resources>
