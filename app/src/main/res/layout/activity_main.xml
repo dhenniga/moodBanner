@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@drawable/create_background_gradient"
     tools:context="com.moodbanner.dev.moodbanner.MainActivity">
 
     <TextView
@@ -12,32 +13,43 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="30dp"
-        android:text="Mood Banner"
-        android:textSize="35sp"/>
+        android:gravity="center"
+        android:lineSpacingExtra="-31dp"
+        android:text="Mood\nBanner"
+        android:textSize="75sp"/>
 
     <Button
         android:id="@+id/btnCreate"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Create New.."/>
+        android:background="@drawable/text_input_background"
+        android:textColor="#77000000"
+        android:layout_margin="10dp"
+        android:text="Create New"/>
 
     <Button
         android:id="@+id/btnEdit"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Edit Existing.."/>
+        android:background="@drawable/text_input_background"
+        android:textColor="#77000000"
+        android:layout_margin="10dp"
+        android:text="Edit Existing"/>
 
     <Button
         android:id="@+id/btnGallery"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="View Gallery.."/>
+        android:background="@drawable/text_input_background"
+        android:textColor="#77000000"
+        android:layout_margin="10dp"
+        android:text="View Gallery"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_margin="40dp"
+        android:layout_marginTop="30dp"
         android:textSize="11sp"
         android:gravity="center"
         android:text="Please select one of the options above.  This is Beta software so its going to be full of bugs.  If you could bare with me on this..." />
