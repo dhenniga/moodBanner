@@ -7,6 +7,18 @@
     android:background="@drawable/create_background_gradient"
     tools:context="com.moodbanner.dev.moodbanner.CreateNew">
 
+    <AbsoluteLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/createnew_background_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+
+    </AbsoluteLayout>
+
     <include layout="@layout/activity_menubar"
         android:layout_height="50dp"
         android:layout_width="match_parent"
@@ -36,7 +48,14 @@
             android:gravity="center"
             android:hint="Enter Text"
             android:letterSpacing="0.01"
+            />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_above="@+id/etInput"
+            android:layout_width="match_parent"
+            android:layout_height="115dp"
+            android:layout_marginBottom="3dp"
             />
 
         <EditText
@@ -55,11 +74,6 @@
             android:padding="10dp"
             android:textColorHint="#88000000"/>
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/my_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
 
     </RelativeLayout>
 

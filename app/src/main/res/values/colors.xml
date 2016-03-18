@@ -8,4 +8,5 @@
     <color name="button_transparent_black">#33000000</color>
     <color name="create_new_gradient_background_top">#f8f8f8</color>
     <color name="create_new_gradient_background_bottom">#d6d6d6</color>
+    <color name="corporate_blue">#0099ff</color>
 </resources>
