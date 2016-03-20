@@ -41,21 +41,26 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:textSize="50sp"
+            android:textSize="90sp"
+            android:textStyle="bold"
             android:textColor="@color/black"
+            android:text="This is some testing text"
             android:layout_margin="20dp"
-            android:background="@null"
             android:gravity="center"
             android:hint="Enter Text"
+            android:lineSpacingExtra="-30dp"
+            android:textColorHint="@color/black"
             android:letterSpacing="0.01"
             />
 
+
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_above="@+id/etInput"
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="115dp"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="0dp"
             />
 
         <EditText
@@ -65,14 +70,16 @@
             android:maxLines="3"
             android:textSize="12sp"
             android:background="@drawable/text_input_background"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
             android:hint="Enter Text"
             android:capitalize="sentences"
-            android:layout_gravity="center_horizontal|bottom"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:padding="10dp"
             android:textColorHint="#88000000"/>
+
 
 
     </RelativeLayout>
