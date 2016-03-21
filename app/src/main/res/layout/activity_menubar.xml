@@ -5,7 +5,7 @@
     android:layout_height="50dp"
     android:layout_gravity="bottom"
     android:gravity="center_vertical"
-    android:background="@null"
+    android:background="#bb000000"
     android:id="@+id/menubar_container"
     tools:context="com.moodbanner.dev.moodbanner.Menubar">
 

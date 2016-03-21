@@ -5,6 +5,7 @@
         android:layout_marginRight="3dp"
         android:layout_width="100dp"
         android:layout_height="110dp"
+        android:elevation="0dp"
         android:id="@+id/card_view">
 
             <ImageView

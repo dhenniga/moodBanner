@@ -34,6 +34,72 @@
         android:scaleType="centerCrop"
         >
 
+        <LinearLayout
+            android:id="@+id/llSizeButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_below="@+id/etInput"
+            android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnFontBigger"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textStyle="bold"
+            android:textSize="14dp"
+            android:background="@drawable/text_input_background"
+            android:text="+"/>
+
+        <Button
+            android:id="@+id/btnFontSmaller"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:textStyle="bold"
+            android:textSize="14dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/text_input_background"
+            android:text="-"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_toRightOf="@+id/llSizeButtons"
+            android:layout_below="@+id/etInput"
+            android:orientation="horizontal">
+
+
+
+            <Button
+                android:id="@+id/btnMoveTextUp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:textSize="14dp"
+                android:background="@drawable/text_input_background"
+                android:text="u"/>
+
+            <Button
+                android:id="@+id/btnMoveTextDown"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:textSize="14dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/text_input_background"
+                android:text="d"/>
+
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/txtMainText"
@@ -48,7 +114,7 @@
             android:layout_margin="20dp"
             android:gravity="center"
             android:hint="Enter Text"
-            android:lineSpacingExtra="-30dp"
+            android:lineSpacingExtra="-60dp"
             android:textColorHint="@color/black"
             android:letterSpacing="0.01"
             />
