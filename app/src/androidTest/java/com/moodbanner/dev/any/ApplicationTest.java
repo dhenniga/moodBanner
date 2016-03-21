@@ -1,4 +1,4 @@
-package com.moodbanner.dev.moodbanner;
+package com.moodbanner.dev.any;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

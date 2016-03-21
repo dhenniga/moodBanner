@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/create_new_container"
     android:background="@drawable/create_background_gradient"
-    tools:context="com.moodbanner.dev.moodbanner.CreateNew">
+    tools:context="com.moodbanner.dev.any.CreateNew">
 
     <AbsoluteLayout
         android:layout_width="match_parent"
