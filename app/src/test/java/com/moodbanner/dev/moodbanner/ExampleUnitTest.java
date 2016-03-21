@@ -1,4 +1,4 @@
-package com.moodbanner.dev.moodbanner;
+package com.moodbanner.dev.any;
 
 import org.junit.Test;
 

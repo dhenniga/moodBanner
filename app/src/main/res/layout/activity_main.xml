@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/create_background_gradient"
-    tools:context="com.moodbanner.dev.moodbanner.MainActivity">
+    tools:context="com.moodbanner.dev.any.MainActivity">
 
     <TextView
         android:id="@+id/tvAppName"
