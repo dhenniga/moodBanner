@@ -1,6 +1,6 @@
 package com.moodbanner.dev.any.JSON;
 
-import com.moodbanner.dev.any.backgrounds.PostValueBackground;
+import com.moodbanner.dev.any.backgrounds.ValueBackground;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,11 +9,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JSONParser {
+public class JSONParserBackgrounds {
 
-    public List<PostValueBackground> parse(JSONObject jsonObject) {
-        List<PostValueBackground> postList = new ArrayList<>();
-        PostValueBackground postValueBackground;
+    public List<ValueBackground> parse(JSONObject jsonObject) {
+        List<ValueBackground> postList = new ArrayList<>();
+        ValueBackground valueBackground;
         try {
             JSONArray postsArray = jsonObject.getJSONArray("posts");
 
@@ -21,17 +21,17 @@ public class JSONParser {
                 JSONObject posts = postsArray.getJSONObject(i);
                 JSONObject post = posts.getJSONObject("post");
 
-                postValueBackground = new PostValueBackground();
+                valueBackground = new ValueBackground();
 
                 int id = post.getInt("id");
                 String name = post.getString("name");
                 String imageURL = post.getString("imageURL");
 
-                postValueBackground.setId(id);
-                postValueBackground.setName(name);
-                postValueBackground.setImageURL(imageURL);
+                valueBackground.setId(id);
+                valueBackground.setName(name);
+                valueBackground.setImageURL(imageURL);
 
-                postList.add(postValueBackground);
+                postList.add(valueBackground);
             }
         } catch (JSONException e) {
             e.printStackTrace();

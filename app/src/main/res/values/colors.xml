@@ -2,11 +2,31 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ffffff</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="button_transparent_black">#33000000</color>
     <color name="create_new_gradient_background_top">#f8f8f8</color>
     <color name="create_new_gradient_background_bottom">#d6d6d6</color>
     <color name="corporate_blue">#0099ff</color>
+
+    <color name="black_transparent_10">#22000000</color>
+    <color name="black_transparent_20">#33000000</color>
+    <color name="black_transparent_30">#44000000</color>
+    <color name="black_transparent_40">#55000000</color>
+    <color name="black_transparent_50">#66000000</color>
+    <color name="black_transparent_60">#77000000</color>
+    <color name="black_transparent_70">#88000000</color>
+    <color name="black_transparent_80">#99000000</color>
+    <color name="black_transparent_90">#aa000000</color>
+    <color name="black_transparent_100">#bb000000</color>
+    <color name="black_transparent_110">#cc000000</color>
+    <color name="black_transparent_120">#dd000000</color>
+    <color name="black_transparent_130">#ee000000</color>
+    <color name="black_transparent_140">#ff000000</color>
+
+
+    <color name="white_transparent_110">#ccffffff</color>
+    <color name="white_transparent_80">#66ffffff</color>
+
 </resources>

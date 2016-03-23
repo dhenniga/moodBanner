@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,32 +30,42 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.moodbanner.dev.any.Fonts.AdapterFont;
+import com.moodbanner.dev.any.Fonts.ValueFont;
 import com.moodbanner.dev.any.JSON.JSONHelper;
-import com.moodbanner.dev.any.JSON.JSONParser;
-import com.moodbanner.dev.any.backgrounds.MyAdapter;
-import com.moodbanner.dev.any.backgrounds.PostValueBackground;
+import com.moodbanner.dev.any.JSON.JSONParserBackgrounds;
+import com.moodbanner.dev.any.JSON.JSONParserFonts;
+import com.moodbanner.dev.any.backgrounds.AdapterBackground;
+import com.moodbanner.dev.any.backgrounds.ValueBackground;
 import com.moodbanner.dev.any.listener.RecyclerClickListener;
 import com.moodbanner.dev.any.listener.RecyclerTouchListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class CreateNew extends AppCompatActivity {
 
-    private TextView txtMainText;
-    private ImageView createnew_background_image;
-    private EditText txtInput;
-    Button btnClipArt, btnSave, btnFontBigger, btnFontSmaller, btnMoveTextUp, btnMoveTextDown;
-    private ToggleButton tbtnFont, tbtnBackground;
-    private Typeface AfterShock, CreatedWorld, AquilineTwo, RalewayMedium, RalewayBold, RalewayLight, PermanentMarker, WCManoNegraBoldBta;
-    private RelativeLayout mRelativeLayout;
+    TextView txtMainText;
+    ImageView createnew_background_image, ivFontThumb;
+    EditText txtInput;
+    Button  btnMoveTextUp, btnMoveTextDown;
+    ToggleButton tbtnFont, tbtnBackground, btnBorder, btnOverlay, btnShare;
+    Typeface AfterShock, CreatedWorld, AquilineTwo, RalewayMedium, RalewayBold, RalewayLight, PermanentMarker, WCManoNegraBoldBta;
+    RelativeLayout mRelativeLayout, main_container;
 
-    private AppCompatActivity activity = CreateNew.this;
-    private RecyclerView mRecyclerView;
-    private List<PostValueBackground> postList;
-    private Context mContext;
+    AppCompatActivity activity = CreateNew.this;
+    RecyclerView mRecyclerViewBackground, mRecyclerViewFonts;
+    List<ValueBackground> ListBackgrounds;
+    List<ValueFont> ListFonts;
+    Context mContext;
+
+    ScaleGestureDetector scaleGestureDetector;
+
+    int fontSize, fontPosition;
 
 
     @Override
@@ -65,7 +77,12 @@ public class CreateNew extends AppCompatActivity {
         setContentView(R.layout.activity_create_new);
 
 
-        AfterShock = Typeface.createFromAsset(getAssets(), "fonts/After_Shok.ttf");
+        scaleGestureDetector = new ScaleGestureDetector(this, new simpleOnScaleGestureListener());
+
+
+
+
+    AfterShock = Typeface.createFromAsset(getAssets(), "fonts/After_Shok.ttf");
         CreatedWorld = Typeface.createFromAsset(getAssets(), "fonts/ANUDRG__.ttf");
         AquilineTwo = Typeface.createFromAsset(getAssets(), "fonts/AquilineTwo.ttf");
         PermanentMarker = Typeface.createFromAsset(getAssets(), "fonts/PermanentMarker.ttf");
@@ -75,46 +92,52 @@ public class CreateNew extends AppCompatActivity {
         RalewayMedium = Typeface.createFromAsset(getAssets(), "interface-fonts/Raleway-Medium.ttf");
         RalewayBold = Typeface.createFromAsset(getAssets(), "interface-fonts/Raleway-Bold.ttf");
 
-
         txtMainText = (TextView) findViewById(R.id.txtMainText);
-        txtMainText.setLineSpacing(1, 0.5f);
+        txtMainText.setLineSpacing(1, 0.6f);
 
         txtInput = (EditText) findViewById(R.id.etInput);
+
         tbtnFont = (ToggleButton) findViewById(R.id.tbtnFont);
         tbtnFont.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up));
+
         tbtnBackground = (ToggleButton) findViewById(R.id.tbtnBackground);
         tbtnBackground.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up));
-        btnClipArt = (Button) findViewById(R.id.btnClipArt);
-        btnClipArt.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up));
-        btnSave = (Button) findViewById(R.id.btnSave);
-        btnFontBigger = (Button) findViewById(R.id.btnFontBigger);
-        btnFontSmaller = (Button) findViewById(R.id.btnFontSmaller);
+
+        btnOverlay = (ToggleButton) findViewById(R.id.btnOverlay);
+        btnOverlay.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up));
+
+        btnBorder = (ToggleButton) findViewById(R.id.btnBorder);
+        btnBorder.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up));
+
+        btnShare = (ToggleButton) findViewById(R.id.btnShare);
+        btnShare.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up));
+
         btnMoveTextUp = (Button) findViewById(R.id.btnMoveTextUp);
         btnMoveTextDown = (Button) findViewById(R.id.btnMoveTextDown);
-        btnSave.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up));
+
+
         mRelativeLayout = (RelativeLayout) findViewById(R.id.create_new_container);
-
-        tbtnFont.setText("FONT");
-        tbtnBackground.setText("BACKGROUND");
+        main_container = (RelativeLayout) findViewById(R.id.main_container);
 
 
-        btnSave.setTypeface(RalewayMedium);
         tbtnFont.setTypeface(RalewayMedium);
         tbtnBackground.setTypeface(RalewayMedium);
-        btnClipArt.setTypeface(RalewayMedium);
+        btnBorder.setTypeface(RalewayMedium);
+        btnOverlay.setTypeface(RalewayMedium);
+        btnShare.setTypeface(RalewayMedium);
 
-        Shader shader = new LinearGradient(0, 0, 0, txtMainText.getTextSize(), Color.RED, Color.BLUE, Shader.TileMode.MIRROR);
-        txtMainText.getPaint().setShader(shader);
-        txtMainText.setShadowLayer(1.5f, -1, 1, Color.LTGRAY);
+        txtInput.setTypeface(RalewayLight);
 
-        txtMainText.setTypeface(WCManoNegraBoldBta);
+//        Shader shader = new LinearGradient(0, 0, 0, txtMainText.getTextSize(), Color.RED, Color.BLUE, Shader.TileMode.MIRROR);
+//        txtMainText.getPaint().setShader(shader);
+//        txtMainText.setShadowLayer(20, 15, 15, Color.parseColor("#44000000"));
+
+        txtMainText.setTypeface(RalewayLight);
 
 
         /**
          *  Setup the screen buttons.  These will be replaced with a gesture touch system.
          */
-        btnFontBigger.setOnClickListener(listener);
-        btnFontSmaller.setOnClickListener(listener);
         btnMoveTextUp.setOnClickListener(listener);
         btnMoveTextDown.setOnClickListener(listener);
         tbtnBackground.setOnClickListener(listener);
@@ -144,29 +167,71 @@ public class CreateNew extends AppCompatActivity {
 
 
         BackgroundGallery();
+        FontGallery();
 
     }
 
 
     /**
-     *   Controls the display of the background gallery popout.
+     *
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // TODO Auto-generated method stub
+        scaleGestureDetector.onTouchEvent(event);
+        return true;
+    }
+
+
+    public class simpleOnScaleGestureListener extends
+            ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            // TODO Auto-generated method stub
+            float size = txtMainText.getTextSize();
+            Log.d("TextSizeStart", String.valueOf(size));
+
+            float factor = detector.getScaleFactor();
+            Log.d("Factor", String.valueOf(factor));
+
+
+            float product = size*factor;
+            Log.d("TextSize", String.valueOf(product));
+            txtMainText.setTextSize(TypedValue.COMPLEX_UNIT_PX, product);
+
+            size = txtMainText.getTextSize();
+            Log.d("TextSizeEnd", String.valueOf(size));
+            fontSize = (int)txtMainText.getTextSize();
+            return true;
+        }
+    }
+
+
+
+
+
+    /**
+     * Controls the display of the background gallery popout.
      */
     public void BackgroundGallery() {
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerViewBackground = (RecyclerView) findViewById(R.id.recyclerViewBackgrounds);
+        LinearLayoutManager mLayoutManagerBackground = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+        mRecyclerViewBackground.setLayoutManager(mLayoutManagerBackground);
 
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(activity, mRecyclerView, new RecyclerClickListener() {
+        mRecyclerViewBackground.addOnItemTouchListener(new RecyclerTouchListener(activity, mRecyclerViewBackground, new RecyclerClickListener() {
 
             @Override
             public void onClick(View view, int position) {
 
-                if (postList != null) {
+                if (ListBackgrounds != null) {
 
-                    Log.i("Background: ", postList.get(position).getName());
+                    Log.i("Background: ", ListBackgrounds.get(position).getName());
 
-                    Picasso.with(mContext).load(postList.get(position).getImageURL()).into(createnew_background_image);
+                    Picasso.with(mContext).load(ListBackgrounds.get(position).getImageURL()).into(createnew_background_image);
                     createnew_background_image.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.zoom_out));
 
                 }
@@ -175,108 +240,192 @@ public class CreateNew extends AppCompatActivity {
     }
 
 
+    /**
+     * Get the font file from online and save it to a temp directory
+     *
+     * @param context
+     * @param url
+     * @return
+     */
+    public File getFontFile(Context context, String url) {
+
+        File file = null;
+
+        try {
+            String fileName = Uri.parse(url).getLastPathSegment();
+            file = File.createTempFile(fileName, null, context.getCacheDir());
+            Log.i("Font URL", url);
+        } catch (IOException e) {
+            Log.i("Font error", "file not created");
+            // error
+        }
+
+        return file;
+    }
+
+    ;
+
 
     /**
-     *   Button Actions for the text controls.  Will be changed soon.
+     * Controls the display of the background gallery popout.
+     */
+    public void FontGallery() {
+
+        mRecyclerViewFonts = (RecyclerView) findViewById(R.id.recyclerViewFonts);
+        LinearLayoutManager mLayoutManagerFont = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+        mRecyclerViewFonts.setLayoutManager(mLayoutManagerFont);
+
+        mRecyclerViewFonts.addOnItemTouchListener(new RecyclerTouchListener(activity, mRecyclerViewFonts, new RecyclerClickListener() {
+
+            @Override
+            public void onClick(View view, int position) {
+
+                if (ListFonts != null) {
+
+                    File fontFileTemp = getFontFile(getBaseContext(), ListFonts.get(position).getFontFile());
+
+                    Log.i("Font Name", ListFonts.get(position).getName());
+                    Log.i("Temp File", fontFileTemp.toString());
+
+                    Typeface font = Typeface.createFromFile(fontFileTemp);
+                    txtMainText.setTypeface(font);
+                    txtMainText.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.bounce));
+
+                }
+            }
+        }));
+    }
+
+
+    /**
+     * Button Actions for the text controls.  Will be changed soon.
      */
     View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
 
-                case R.id.btnFontBigger:
-                    Log.i("Button Press","INCREASE Font Size");
-                    txtMainText.setTextSize(TypedValue.COMPLEX_UNIT_PX, txtMainText.getTextSize() + 10);
-                    break;
-
-                case R.id.btnFontSmaller:
-                    Log.i("Button Press","DECREASE Font Size");
-                    txtMainText.setTextSize(TypedValue.COMPLEX_UNIT_PX, txtMainText.getTextSize() - 10);
-                    break;
-
                 case R.id.btnMoveTextUp:
-                    Log.i("Button Press","Move text UP");
+                    Log.i("Button Press", "Move text UP");
                     txtMainText.setY(txtMainText.getY() - 40f);
+                    fontPosition = (int) txtMainText.getY();
                     break;
+
 
                 case R.id.btnMoveTextDown:
-                    Log.i("Button Press","Move text DOWN");
+                    Log.i("Button Press", "Move text DOWN");
                     txtMainText.setY(txtMainText.getY() + 40f);
+                    fontPosition = (int) txtMainText.getY();
                     break;
+
 
                 case R.id.tbtnBackground:
 
-                    mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+                    mRecyclerViewBackground = (RecyclerView) findViewById(R.id.recyclerViewBackgrounds);
                     createnew_background_image = (ImageView) findViewById(R.id.createnew_background_image);
-                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+                    LinearLayoutManager llmBackground = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+
 
                     if (tbtnBackground.isChecked()) {
 
-                        Log.i("Menu Open: ", "Backgrounds");
+                        Log.i("Menu Open", "Backgrounds");
 
-                        new JSONAsync().execute();
+                        new JSONAsyncBackgrounds().execute();
 
-                        mRecyclerView.setLayoutManager(mLayoutManager);
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        mRecyclerView.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadein));
+
+                        /** If the fonts menu is visible, remove it  **/
+                        if (mRecyclerViewFonts.getVisibility() == View.VISIBLE) {
+
+                            mRecyclerViewFonts.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
+                            mRecyclerViewFonts.setVisibility(View.GONE);
+                            tbtnFont.setChecked(false);
+                            tbtnFont.setTypeface(RalewayMedium);
+                            tbtnFont.setText("FONT");
+                            tbtnFont.setTextColor(getResources().getColor(R.color.white_transparent_80));
+                            tbtnFont.setBackgroundResource(R.drawable.text_input_background);
+
+                        }
+
+                        mRecyclerViewBackground.setLayoutManager(llmBackground);
+                        mRecyclerViewBackground.setVisibility(View.VISIBLE);
+                        mRecyclerViewBackground.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadein));
 
 
                         WindowManager w = getWindowManager();
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(w.getDefaultDisplay().getWidth(), 520);
-                        params.topMargin = (w.getDefaultDisplay().getHeight() - 695);
+                        params.topMargin = (w.getDefaultDisplay().getHeight() - 495);
                         tbtnBackground.setText("BACKGROUND");
                         tbtnBackground.setTypeface(RalewayBold);
-                        tbtnBackground.setTextColor(getResources().getColor(R.color.corporate_blue));
-                        tbtnBackground.setBackgroundResource(R.drawable.menubar_button_active);
+                        tbtnBackground.setTextColor(getResources().getColor(R.color.white));
+                        tbtnBackground.setBackgroundColor(getResources().getColor(R.color.black));
+
                     } else {
 
-                        Log.i("Menu Close: ", "Backgrounds");
-                        mRecyclerView.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
-                        mRecyclerView.setVisibility(View.GONE);
+                        Log.i("Menu Close", "Backgrounds");
+                        mRecyclerViewBackground.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
+                        mRecyclerViewBackground.setVisibility(View.GONE);
                         tbtnBackground.setText("BACKGROUND");
                         tbtnBackground.setTypeface(RalewayMedium);
-                        tbtnBackground.setTextColor(getResources().getColor(R.color.black));
+                        tbtnBackground.setTextColor(getResources().getColor(R.color.white_transparent_80));
                         tbtnBackground.setBackgroundResource(R.drawable.text_input_background);
                     }
 
                     break;
 
+
                 case R.id.tbtnFont:
 
 
-//                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.circles);
-//                    Shader shader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-//                    txtMainText.getPaint().setShader(shader);
+                    mRecyclerViewFonts = (RecyclerView) findViewById(R.id.recyclerViewFonts);
+                    ivFontThumb = (ImageView) findViewById(R.id.ivFontThumb);
+                    LinearLayoutManager llmFont = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
 
-                    LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View addView = layoutInflater.inflate(R.layout.activity_font_selection, null);
 
                     if (tbtnFont.isChecked()) {
 
                         Log.i("Menu Open", "Fonts");
 
-                        addView.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadein));
+                        new JSONAsyncFonts().execute();
+
+                        /** If the fonts menu is visible, remove it  **/
+                        if (mRecyclerViewBackground.getVisibility() == View.VISIBLE) {
+
+                            mRecyclerViewBackground.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
+                            mRecyclerViewBackground.setVisibility(View.GONE);
+                            tbtnBackground.setChecked(false);
+                            tbtnBackground.setText("BACKGROUND");
+                            tbtnBackground.setTypeface(RalewayMedium);
+                            tbtnBackground.setTextColor(getResources().getColor(R.color.white_transparent_80));
+                            tbtnBackground.setBackgroundResource(R.drawable.text_input_background);
+
+                        }
+
+                        mRecyclerViewFonts.setLayoutManager(llmFont);
+                        mRecyclerViewFonts.setVisibility(View.VISIBLE);
+                        mRecyclerViewFonts.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadein));
 
                         WindowManager w = getWindowManager();
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(w.getDefaultDisplay().getWidth(), 210);
-                        params.topMargin = (w.getDefaultDisplay().getHeight() - 385);
-                        mRelativeLayout.addView(addView, params);
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(w.getDefaultDisplay().getWidth(), 520);
+                        params.topMargin = (w.getDefaultDisplay().getHeight() - 485);
                         tbtnFont.setText("FONT");
-                        tbtnFont.setTextColor(getResources().getColor(R.color.corporate_blue));
-                        tbtnFont.setBackgroundResource(R.drawable.menubar_button_active);
+                        tbtnFont.setTypeface(RalewayBold);
+                        tbtnFont.setTextColor(getResources().getColor(R.color.white));
+                        tbtnFont.setBackgroundColor(getResources().getColor(R.color.black));
 
                     } else {
 
                         Log.i("Menu Close", "Fonts");
 
-                        addView.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
-
+                        mRecyclerViewFonts.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
+                        mRecyclerViewFonts.setVisibility(View.GONE);
                         tbtnFont.setText("FONT");
-                        tbtnFont.setTextColor(getResources().getColor(R.color.black));
+                        tbtnFont.setTypeface(RalewayMedium);
+                        tbtnFont.setTextColor(getResources().getColor(R.color.white_transparent_80));
                         tbtnFont.setBackgroundResource(R.drawable.text_input_background);
                     }
 
                     break;
+
 
                 default:
                     break;
@@ -285,30 +434,57 @@ public class CreateNew extends AppCompatActivity {
     };
 
 
-
     /**
-     *  get the JSON data and do stuff with it.
+     * get the JSON data for the Backgrounds and do stuff with it.
      */
-    class JSONAsync extends AsyncTask<Void, Void, Void> {
-        ProgressDialog pd;
+    class JSONAsyncBackgrounds extends AsyncTask<Void, Void, Void> {
+//        ProgressDialog pd;
 
         @Override
         protected void onPreExecute() {
-            pd = ProgressDialog.show(CreateNew.this, null, "Loading Backgrounds ...", true, false);
+//            pd = ProgressDialog.show(CreateNew.this, null, "Loading Backgrounds ...", true, false);
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            JSONObject jsonObject = new JSONHelper().getJSONFromUrl();
-            postList = new JSONParser().parse(jsonObject);
+            JSONObject jsonObject = new JSONHelper().getJSONFromUrlBackgrounds();
+            ListBackgrounds = new JSONParserBackgrounds().parse(jsonObject);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            MyAdapter myAdapter = new MyAdapter(activity, postList);
-            mRecyclerView.setAdapter(myAdapter);
-            pd.dismiss();
+            AdapterBackground adapterBackground = new AdapterBackground(activity, ListBackgrounds);
+            mRecyclerViewBackground.setAdapter(adapterBackground);
+//            pd.dismiss();
         }
     }
+
+
+    /**
+     * get the JSON data for the Backgrounds and do stuff with it.
+     */
+    class JSONAsyncFonts extends AsyncTask<Void, Void, Void> {
+//        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+//            pd = ProgressDialog.show(CreateNew.this, null, "Loading Fonts ...", true, false);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            JSONObject jsonObject = new JSONHelper().getJSONFromUrlFonts();
+            ListFonts = new JSONParserFonts().parse(jsonObject);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            AdapterFont adapterFont = new AdapterFont(activity, ListFonts);
+            mRecyclerViewFonts.setAdapter(adapterFont);
+//            pd.dismiss();
+        }
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.moodbanner.dev.any.backgrounds;
 
-public class PostValueBackground {
+public class ValueBackground {
 
     private int id;
     private String name, imageURL;

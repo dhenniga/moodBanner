@@ -15,15 +15,15 @@ import java.util.List;
 /**
  * Created by dhen0003 on 16/03/16.
  */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class AdapterBackground extends RecyclerView.Adapter<AdapterBackground.ViewHolder> {
 
 
     private Context mContext;
-    private List<PostValueBackground> postList;
+    private List<ValueBackground> postList;
     private LayoutInflater inflater;
 
 
-    public MyAdapter(Context context, List<PostValueBackground> postList) {
+    public AdapterBackground(Context context, List<ValueBackground> postList) {
         this.postList = postList;
         this.inflater = LayoutInflater.from(context);
         this.mContext = context;
@@ -46,7 +46,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterBackground.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.activity_background_fragment, parent, false);
         return new ViewHolder(view);
     }
@@ -54,11 +54,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        PostValueBackground currentPost = postList.get(position);
+        ValueBackground currentPost = postList.get(position);
         holder.tvName.setText(currentPost.getName());
 
         String imageURL = currentPost.getImageURL();
-        Picasso.with(mContext).load(imageURL).resize(200, 200).centerCrop().into(holder.imgBackground);
+        Picasso.with(mContext).load(imageURL).resize(245, 200).centerCrop().into(holder.imgBackground);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

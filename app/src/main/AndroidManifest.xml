@@ -13,16 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <activity android:name="com.moodbanner.dev.any.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name="com.moodbanner.dev.any.CreateNew"/>
-        <activity android:name="com.moodbanner.dev.any.EditExisting"/>
-        <activity android:name="com.moodbanner.dev.any.Gallery"/>
+        <activity android:name=".CreateNew"/>
+        <activity android:name=".EditExisting"/>
+        <activity android:name=".Gallery"/>
     </application>
 
 </manifest>

@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:layout_width="120dp"
+    android:layout_height="80dp"
+    android:id="@+id/card_view"
+    cardview:cardCornerRadius="0dp"
+    cardview:cardElevation="0dp"
+    cardview:cardBackgroundColor="@color/black">
+
+<ImageView
+    android:layout_width="wrap_content"
     android:layout_height="60dp"
-    android:layout_alignParentBottom="true"
-    android:id="@+id/font_selection_container">
+    android:id="@+id/ivFontThumb"
+    android:layout_gravity="center_horizontal"
+    android:background="@null"/>
 
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:id="@+id/tvFontName"
+    android:layout_gravity="bottom|center_horizontal"
+    android:textColor="#99ffffff"
+    android:gravity="center"
+    android:lines="1"
+    android:singleLine="true"
+    android:text="testing"
+    android:ellipsize="marquee"
+    android:textSize="8sp"
+    android:background="@null"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     Sample     |     "
-        android:gravity="center_vertical"
-        android:background="#ffffff"
-        android:textSize="14sp"
-        android:layout_alignParentBottom="true"/>
-
-
-    </HorizontalScrollView>
-</RelativeLayout>
+</android.support.v7.widget.CardView>

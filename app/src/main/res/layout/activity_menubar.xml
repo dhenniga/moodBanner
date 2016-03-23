@@ -2,55 +2,76 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="40dp"
     android:layout_gravity="bottom"
     android:gravity="center_vertical"
-    android:background="#bb000000"
     android:id="@+id/menubar_container"
     tools:context="com.moodbanner.dev.any.Menubar">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="5"
+        android:orientation="horizontal">
+
     <ToggleButton
         android:id="@+id/tbtnFont"
-        android:layout_width="60dp"
-        android:layout_height="35dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
         android:background="@drawable/text_input_background"
-        android:text="font"
+        android:textOn="font"
+        android:textOff="font"
         android:textSize="10sp"
-        android:layout_marginLeft="10dp"
-        android:textColor="#000000" />
+        android:textColor="#66ffffff" />
 
     <ToggleButton
         android:id="@+id/tbtnBackground"
         android:layout_toEndOf="@+id/tbtnFont"
-        android:layout_width="105dp"
-        android:layout_height="35dp"
+        android:layout_width="0dp"
+        android:layout_weight="1.2"
+        android:layout_height="match_parent"
         android:background="@drawable/text_input_background"
-        android:text="Background"
+        android:textOn="Background"
+        android:textOff="Background"
         android:textSize="10sp"
-        android:layout_marginLeft="10dp"
-        android:textColor="#000000"/>
+        android:textColor="#66ffffff"/>
 
-    <Button
-        android:id="@+id/btnClipArt"
+    <ToggleButton
+        android:id="@+id/btnBorder"
         android:layout_toEndOf="@+id/tbtnBackground"
-        android:layout_width="70dp"
-        android:layout_height="35dp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:background="@drawable/text_input_background"
-        android:text="ClipArt"
+        android:textOn="Border"
+        android:textOff="Border"
         android:textSize="10sp"
-        android:layout_marginLeft="10dp"
-        android:textColor="#000000" />
+        android:textColor="#66ffffff" />
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_alignParentRight="true"
-        android:layout_width="60dp"
-        android:layout_height="35dp"
+    <ToggleButton
+        android:id="@+id/btnOverlay"
+        android:layout_toEndOf="@+id/btnBorder"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:background="@drawable/text_input_background"
-        android:text="Save"
+        android:textOn="Overlay"
+        android:textOff="Overlay"
         android:textSize="10sp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:textColor="#000000" />
+        android:textColor="#66ffffff" />
+
+    <ToggleButton
+        android:id="@+id/btnShare"
+        android:layout_alignParentRight="true"
+        android:layout_width="0dp"
+        android:layout_weight="0.9"
+        android:layout_height="match_parent"
+        android:background="@drawable/text_input_background"
+        android:textOn="Share"
+        android:textOff="Share"
+        android:textSize="10sp"
+        android:textColor="#66ffffff" />
+</LinearLayout>
 
 </RelativeLayout>
