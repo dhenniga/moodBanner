@@ -11,12 +11,19 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class JSONHelper {
+
+
     private static final String URL_BACKGROUND = "http://www.fluidmotion.ie/moodbanner/getbackgroundimages.php";
     private static final String URL_FONT = "http://www.fluidmotion.ie/moodbanner/getfonts.php";
     private static final String TAG = JSONHelper.class.getSimpleName();
     private JSONObject mJsonObject = null;
     private String json = "";
 
+
+    /**
+     *
+     * @return
+     */
     public JSONObject getJSONFromUrlBackgrounds() {
         try {
             URL url = new URL(URL_BACKGROUND);

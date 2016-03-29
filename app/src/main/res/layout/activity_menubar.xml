@@ -18,7 +18,7 @@
         android:id="@+id/tbtnFont"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.9"
+        android:layout_weight="0.8"
         android:background="@drawable/text_input_background"
         android:textOn="font"
         android:textOff="font"
@@ -29,7 +29,7 @@
         android:id="@+id/tbtnBackground"
         android:layout_toEndOf="@+id/tbtnFont"
         android:layout_width="0dp"
-        android:layout_weight="1.2"
+        android:layout_weight="1.4"
         android:layout_height="match_parent"
         android:background="@drawable/text_input_background"
         android:textOn="Background"
@@ -41,13 +41,13 @@
         android:id="@+id/btnBorder"
         android:layout_toEndOf="@+id/tbtnBackground"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.9"
         android:layout_height="match_parent"
         android:background="@drawable/text_input_background"
         android:textOn="Border"
         android:textOff="Border"
         android:textSize="10sp"
-        android:textColor="#66ffffff" />
+        android:textColor="#22ffffff" />
 
     <ToggleButton
         android:id="@+id/btnOverlay"
@@ -59,7 +59,7 @@
         android:textOn="Overlay"
         android:textOff="Overlay"
         android:textSize="10sp"
-        android:textColor="#66ffffff" />
+        android:textColor="#22ffffff" />
 
     <ToggleButton
         android:id="@+id/btnShare"
@@ -71,7 +71,7 @@
         android:textOn="Share"
         android:textOff="Share"
         android:textSize="10sp"
-        android:textColor="#66ffffff" />
+        android:textColor="#22ffffff" />
 </LinearLayout>
 
 </RelativeLayout>

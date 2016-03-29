@@ -1,15 +1,12 @@
 package com.moodbanner.dev.any.JSON;
 
 import com.moodbanner.dev.any.Fonts.ValueFont;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class JSONParserFonts {
 

@@ -34,69 +34,68 @@
         android:scaleType="centerCrop"
         >
 
-        <LinearLayout
-            android:id="@+id/llSizeButtons"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_below="@+id/etInput"
-            android:orientation="horizontal">
+        <AbsoluteLayout
+            android:layout_width="200dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/tempButtons"
+            android:background="#88000000"
+            android:rotation="270"
 
-        <Button
-            android:id="@+id/btnFontBigger"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textStyle="bold"
-            android:textSize="14dp"
-            android:background="@drawable/text_input_background"
-            android:text="+"/>
+            android:layout_marginLeft="-73dp"
+            android:layout_marginTop="84dp">
 
-        <Button
-            android:id="@+id/btnFontSmaller"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="10dp"
-            android:textStyle="bold"
-            android:textSize="14dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/text_input_background"
-            android:text="-"/>
+        <SeekBar
+            android:id="@+id/seekBar1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="0dp"
+            android:progress="200"
+            android:max="400"
+            />
 
-        </LinearLayout>
+        </AbsoluteLayout>
+
 
         <LinearLayout
+            android:id="@+id/tempButtons"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_toRightOf="@+id/llSizeButtons"
-            android:layout_below="@+id/etInput"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/topbar"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
 
 
 
             <Button
                 android:id="@+id/btnMoveTextUp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textStyle="bold"
-                android:textSize="14dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:textColor="@color/white_transparent_80"
+                android:textSize="12dp"
                 android:background="@drawable/text_input_background"
                 android:text="u"/>
 
             <Button
                 android:id="@+id/btnMoveTextDown"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="10dp"
-                android:textStyle="bold"
-                android:textSize="14dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:textSize="12dp"
                 android:layout_marginTop="10dp"
+                android:textColor="@color/white_transparent_80"
                 android:background="@drawable/text_input_background"
                 android:text="d"/>
+
+            <ToggleButton
+                android:id="@+id/tbtnShadow"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:textSize="12dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white_transparent_80"
+                android:background="@drawable/text_input_background"
+                android:textOn="S"
+                android:textOff="S"/>
 
         </LinearLayout>
 
@@ -110,12 +109,10 @@
             android:textSize="90sp"
             android:textColor="@color/white"
             android:text="This is some testing text"
-            android:layout_margin="20dp"
             android:gravity="center"
+            android:lineSpacingExtra="-30dp"
             android:hint="Enter Text"
-            android:lineSpacingExtra="-50dp"
             android:textColorHint="@color/white"
-            android:letterSpacing="0.01"
             />
 
 
@@ -135,8 +132,26 @@
             android:background="@null"
             />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewFontColours"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@null"
+            />
+
+        <LinearLayout
+            android:id="@+id/topbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
         <EditText
             android:id="@+id/etInput"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:minHeight="50dp"
             android:layout_height="wrap_content"
@@ -149,7 +164,21 @@
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
             android:textColorHint="#66ffffff"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            />
+
+            <ToggleButton
+                android:id="@+id/tbtnShowHideUI"
+                android:textOn=""
+                android:textOff=""
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_check"
+                android:textColor="@color/white_transparent_80"
+                android:textSize="12dp" />
+
+        </LinearLayout>
 
 
 

@@ -6,8 +6,8 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="button_transparent_black">#33000000</color>
-    <color name="create_new_gradient_background_top">#f8f8f8</color>
-    <color name="create_new_gradient_background_bottom">#d6d6d6</color>
+    <color name="create_new_gradient_background_top">#111111</color>
+    <color name="create_new_gradient_background_bottom">#333333</color>
     <color name="corporate_blue">#0099ff</color>
 
     <color name="black_transparent_10">#22000000</color>
