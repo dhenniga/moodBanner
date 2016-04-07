@@ -12,9 +12,9 @@ import java.util.Map;
  */
 public class TextColourList extends Activity {
 
-    public List<ValueFontColour> listFontColours() {
+    public List<ValueTextColour> listFontColours() {
 
-        List<ValueFontColour> listFontColours = new ArrayList<ValueFontColour>();
+        List<ValueTextColour> listFontColours = new ArrayList<ValueTextColour>();
 
         Map<String, String> colours = new HashMap<String, String>();
 
@@ -160,11 +160,11 @@ public class TextColourList extends Activity {
 
         for (Map.Entry<String, String> entry : colours.entrySet()) {
 
-            ValueFontColour valueFontColour = new ValueFontColour();
+            ValueTextColour valueTextColour = new ValueTextColour();
 
-            valueFontColour.setColourName(entry.getKey());
-            valueFontColour.setColourHexCode(entry.getValue());
-            listFontColours.add(valueFontColour);
+            valueTextColour.setColourName(entry.getKey());
+            valueTextColour.setColourHexCode(entry.getValue());
+            listFontColours.add(valueTextColour);
 
         }
 

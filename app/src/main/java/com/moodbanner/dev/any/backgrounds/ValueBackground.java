@@ -1,17 +1,8 @@
-package com.moodbanner.dev.any.backgrounds;
+package com.moodbanner.dev.any.Backgrounds;
 
 public class ValueBackground {
 
-    private int id;
     private String name, imageURL;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

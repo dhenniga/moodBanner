@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.moodbanner.dev.any.R;
-import com.moodbanner.dev.any.Text.ValueFont;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.moodbanner.dev.any.backgrounds;
+package com.moodbanner.dev.any.Backgrounds;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

@@ -20,11 +20,11 @@ public class AdapterTextColour extends RecyclerView.Adapter<AdapterTextColour.Vi
 
 
     private Context mContext;
-    private List<ValueFontColour> colourList;
+    private List<ValueTextColour> colourList;
     private LayoutInflater inflater;
 
 
-    public AdapterTextColour(Context context, List<ValueFontColour> colourList) {
+    public AdapterTextColour(Context context, List<ValueTextColour> colourList) {
         this.colourList = colourList;
         this.inflater = LayoutInflater.from(context);
         this.mContext = context;
@@ -55,7 +55,7 @@ public class AdapterTextColour extends RecyclerView.Adapter<AdapterTextColour.Vi
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ValueFontColour currentPost = colourList.get(position);
+        ValueTextColour currentPost = colourList.get(position);
 
         holder.tvColourName.setText(currentPost.getColourName());
 

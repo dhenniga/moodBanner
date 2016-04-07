@@ -1,7 +1,7 @@
 package com.moodbanner.dev.any;
 
-import com.moodbanner.dev.any.Fonts.FontList;
-import com.moodbanner.dev.any.Fonts.ValueFont;
+import com.moodbanner.dev.any.Text.Font.FontList;
+import com.moodbanner.dev.any.Text.Font.ValueFont;
 
 import junit.framework.Assert;
 
@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.

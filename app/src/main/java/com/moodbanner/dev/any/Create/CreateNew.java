@@ -17,13 +17,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,7 +39,6 @@ import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
-
 import com.moodbanner.dev.any.Backgrounds.AdapterBackground;
 import com.moodbanner.dev.any.Backgrounds.BackgroundList;
 import com.moodbanner.dev.any.Backgrounds.ValueBackground;
@@ -68,65 +68,83 @@ import java.util.List;
 public class CreateNew extends AppCompatActivity {
 
 
+
+
     /**  Variables for the Spring Animator **/
     private static double TENSION = 500;
     private static double DAMPER = 10;
 
-    private TextView txtMainText;
+    private AppCompatActivity activity = CreateNew.this;
+    private TextView txtMainText, txtHeight, txtWidth, txtSize, txtAlpha;
     private ImageView createnew_background_image, ivFontThumb, ivColour;
     private EditText txtInput;
-    private Button btnMoveTextUp, btnMoveTextDown;
-    private ToggleButton tbtnText, tbtnBackground, btnBorder, btnOverlay, btnShare, tbtnShowHideUI,
-            tbtnShadow, tbtnTextFont, tbtnTextColour, tbtnTextTexture, tbtnTextEffects, tbtnBackgroundStandard, tbtnBackgroundCamera, tbtnBackgroundOnline;
+    private ToggleButton tbtnText, tbtnBackground, btnBorder, btnOverlay, btnShare, tbtnShowHideUI, tbtnShadow, tbtnTextFont, tbtnTextColour, tbtnTextTexture, tbtnTextEffects, tbtnBackgroundStandard, tbtnBackgroundCamera, tbtnBackgroundOnline;
+    private Button btnTextAlignLeft, btnTextAlignCenter, btnTextAlignRight;
     private Typeface RalewayMedium, RalewayBold, RalewayLight, font;
-    private RelativeLayout mRelativeLayout, main_container, seekbarContainer;
-    private LinearLayout menuFonts, menuBackgrounds;
-
-    private AppCompatActivity activity = CreateNew.this;
+    private RelativeLayout mRelativeLayout, main_container, seekbarHeightContainer, seekbarSizeContainer, seekbarWidthContainer, seekbarAlphaContainer;
+    private LinearLayout menuFonts, menuBackgrounds, llTextControls1, llTextControls2;
     private RecyclerView mRecyclerViewBackground, mRecyclerViewFonts, mRecyclerViewTextColours, mRecyclerViewTexture;
     private List<ValueBackground> ListBackgrounds;
     private List<ValueFont> ListFonts;
     private List<ValueTextColour> ListFontColours;
     private List<ValueTexture> ListTextures;
     private Context mContext;
+    private SeekBar seekBarHeight, seekBarSize, seekBarWidth, seekBarAlpha;
 
-    private ScaleGestureDetector scaleGestureDetector;
-
-    SeekBar seekBar;
-
-
-    int fontSize, fontPosition;
-
+    int fontSize, fontPosition, windowHeight, windowWidth;
+    int mainTextHeightProgress = 0;
+    int mainTextWidth = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
-
+        removeSoftMenuBar();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new);
 
 
-        scaleGestureDetector = new ScaleGestureDetector(this, new simpleOnScaleGestureListener());
+        /**  Get the Extra intent from the previous screen as to which social media
+         *   layout button was press and adjust the screen height accordingly
+         */
+        if (savedInstanceState == null) {
+
+            Bundle extras = getIntent().getExtras();
+
+            if (extras == null) {
+
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                windowHeight = params.height;
+
+            } else {
+
+                windowHeight = extras.getInt("screenHeight");
+                Log.d("windowHeight", ((String.valueOf(windowHeight))));
+
+                main_container = (RelativeLayout) findViewById(R.id.main_container);
+                main_container.getLayoutParams().height = windowHeight;
+                main_container.requestLayout();
+
+            }
+
+        } else {
+
+            windowHeight = (Integer) savedInstanceState.getSerializable("screenHeight");
+
+        }
 
 
-        RalewayLight = Typeface.createFromAsset(getAssets(), "interface-fonts/Raleway-Thin.ttf");
-        RalewayMedium = Typeface.createFromAsset(getAssets(), "interface-fonts/Raleway-Medium.ttf");
-        RalewayBold = Typeface.createFromAsset(getAssets(), "interface-fonts/Raleway-Bold.ttf");
+        /**  Set the width of the display to Int windowWidth  **/
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        Log.d("windowWidth", "Display width in px is " + metrics.widthPixels);
+        windowWidth = metrics.widthPixels;
 
-        font = Typeface.createFromAsset(getAssets(), "interface-fonts/Raleway-Thin.ttf");
+
 
         txtMainText = (TextView) findViewById(R.id.txtMainText);
-        txtMainText.setLineSpacing((200), 0.4f);
 
         txtInput = (EditText) findViewById(R.id.etInput);
 
@@ -134,20 +152,18 @@ public class CreateNew extends AppCompatActivity {
         tbtnBackgroundCamera = (ToggleButton) findViewById(R.id.tbtnBackgroundCamera);
         tbtnBackgroundOnline = (ToggleButton) findViewById(R.id.tbtnBackgroundOnline);
 
+
+        /**  Bottom Menu  **/
         tbtnText = (ToggleButton) findViewById(R.id.tbtnText);
-        tbtnText.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
-
         tbtnBackground = (ToggleButton) findViewById(R.id.tbtnBackground);
-        tbtnBackground.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
-
         btnOverlay = (ToggleButton) findViewById(R.id.btnOverlay);
-        btnOverlay.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
-
         btnBorder = (ToggleButton) findViewById(R.id.btnBorder);
-        btnBorder.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
-
         btnShare = (ToggleButton) findViewById(R.id.btnShare);
-        btnShare.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
+        TBAnimateIn(tbtnText);
+        TBAnimateIn(tbtnBackground);
+        BAnimateIn(btnOverlay);
+        BAnimateIn(btnBorder);
+        BAnimateIn(btnShare);
 
 
         menuFonts = (LinearLayout) findViewById(R.id.menuFonts);
@@ -159,25 +175,50 @@ public class CreateNew extends AppCompatActivity {
 
         txtInput.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_in));
 
-        btnMoveTextUp = (Button) findViewById(R.id.btnMoveTextUp);
-        btnMoveTextDown = (Button) findViewById(R.id.btnMoveTextDown);
-
         tbtnShadow = (ToggleButton) findViewById(R.id.tbtnShadow);
+
+
+        btnTextAlignLeft = (Button) findViewById(R.id.btnTextAlignLeft);
+        btnTextAlignCenter = (Button) findViewById(R.id.btnTextAlignCenter);
+        btnTextAlignRight = (Button) findViewById(R.id.btnTextAlignRight);
 
 
         mRelativeLayout = (RelativeLayout) findViewById(R.id.create_new_container);
 
+        llTextControls1 = (LinearLayout) findViewById(R.id.llTextControls1);
+        llTextControls2 = (LinearLayout) findViewById(R.id.llTextControls2);
 
-        main_container = (RelativeLayout) findViewById(R.id.main_container);
+        seekbarHeightContainer = (RelativeLayout) findViewById(R.id.seekbarHeightContainer);
+        seekBarHeight = (SeekBar) findViewById(R.id.sbHeight);
+        txtHeight = (TextView) findViewById(R.id.txtHeight);
 
-        seekbarContainer = (RelativeLayout) findViewById(R.id.seekbarContainer);
-        seekBar = (SeekBar) findViewById(R.id.seekBar1);
+        seekbarSizeContainer = (RelativeLayout) findViewById(R.id.seekbarSizeContainer);
+        seekBarSize = (SeekBar) findViewById(R.id.sbSize);
+        txtSize = (TextView) findViewById(R.id.txtSize);
+
+        seekbarWidthContainer = (RelativeLayout) findViewById(R.id.seekbarWidthContainer);
+        seekBarWidth = (SeekBar) findViewById(R.id.sbWidth);
+        txtWidth = (TextView) findViewById(R.id.txtWidth);
+
+        seekbarAlphaContainer = (RelativeLayout) findViewById(R.id.seekbarAlphaContainer);
+        seekBarAlpha = (SeekBar) findViewById(R.id.sbAlpha);
+        txtAlpha = (TextView) findViewById(R.id.txtAlpha);
 
 
         tbtnTextFont = (ToggleButton) findViewById(R.id.tbtnTextFont);
         tbtnTextColour = (ToggleButton) findViewById(R.id.tbtnTextColour);
         tbtnTextTexture = (ToggleButton) findViewById(R.id.tbtnTextTexture);
         tbtnTextEffects = (ToggleButton) findViewById(R.id.tbtnTextEffects);
+
+
+
+        //  FONTS  //
+
+        /**  Import three interface fonts **/
+        RalewayLight = Typeface.createFromAsset(getAssets(), "interface-fonts/Raleway-Thin.ttf");
+        RalewayMedium = Typeface.createFromAsset(getAssets(), "interface-fonts/Raleway-Medium.ttf");
+        RalewayBold = Typeface.createFromAsset(getAssets(), "interface-fonts/Raleway-Bold.ttf");
+        font = Typeface.createFromAsset(getAssets(), "interface-fonts/Raleway-Thin.ttf");
 
         /** Menu Base Fonts  **/
         tbtnText.setTypeface(RalewayMedium);
@@ -193,34 +234,37 @@ public class CreateNew extends AppCompatActivity {
         tbtnTextTexture.setTypeface(RalewayMedium);
         tbtnTextEffects.setTypeface(RalewayMedium);
 
+
         /** Menu Background Menu Fonts **/
         tbtnBackgroundStandard.setTypeface(RalewayMedium);
         tbtnBackgroundCamera.setTypeface(RalewayMedium);
         tbtnBackgroundOnline.setTypeface(RalewayMedium);
 
+
+        /** SeekBar Description Text fonts  **/
+        txtWidth.setTypeface(RalewayLight);
+        txtSize.setTypeface(RalewayLight);
+        txtHeight.setTypeface(RalewayLight);
+        txtAlpha.setTypeface(RalewayLight);
+
         tbtnShowHideUI.setTypeface(RalewayMedium);
 
         txtInput.setTypeface(RalewayLight);
-
-//        Shader shader = new LinearGradient(0, 0, 0, txtMainText.getTextSize(), Color.RED, Color.BLUE, Shader.TileMode.MIRROR);
-//        txtMainText.getPaint().setShader(shader);
-//        txtMainText.setShadowLayer(25, 1, 1, Color.parseColor("#ffffffff"));
-
-//        GLOW BELOW
-        txtMainText.setShadowLayer(25, 1, 1, Color.parseColor("#ffffffff"));
-
         txtMainText.setTypeface(font);
+
 
 
         /**
          *  Setup the screen buttons.  These will be replaced with a gesture touch system.
          */
-        btnMoveTextUp.setOnClickListener(listener);
-        btnMoveTextDown.setOnClickListener(listener);
         tbtnBackground.setOnClickListener(listener);
         tbtnText.setOnClickListener(listener);
         tbtnShowHideUI.setOnClickListener(listener);
         tbtnShadow.setOnClickListener(listener);
+
+        btnTextAlignLeft.setOnClickListener(listener);
+        btnTextAlignCenter.setOnClickListener(listener);
+        btnTextAlignRight.setOnClickListener(listener);
 
 
         /**
@@ -229,6 +273,7 @@ public class CreateNew extends AppCompatActivity {
         txtInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                removeSoftMenuBar();
             }
 
             @Override
@@ -239,13 +284,7 @@ public class CreateNew extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 txtMainText.setText(txtInput.getText());
-                getWindow().getDecorView().setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                removeSoftMenuBar();
 
             }
         });
@@ -256,29 +295,86 @@ public class CreateNew extends AppCompatActivity {
         FontColourGallery();
         TextureGallery();
 
+        /**  Setup the SeekBar Controllers **/
+        SeekBarController seekBarHeightController = new SeekBarController();
+        seekBarHeightController.seekBarMethod(seekBarHeight, txtMainText);
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        SeekBarController seekBarSizeController = new SeekBarController();
+        seekBarSizeController.seekBarMethod(seekBarSize, txtMainText);
 
-            int progress = 0;
+        SeekBarController seekBarWidthController = new SeekBarController();
+        seekBarWidthController.seekBarMethod(seekBarWidth, txtMainText);
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                progress = progresValue;
-                txtMainText.setLineSpacing((progress), 0.4f);
+        SeekBarController seekBarAlphaController = new SeekBarController();
+        seekBarAlphaController.seekBarMethod(seekBarAlpha, txtMainText);
+
+
+        /**
+         *   OnTouch listener for moving the txtMainText around the screen
+         */
+        txtMainText.setOnTouchListener(new TextView.OnTouchListener() {
+
+            public boolean onTouch(View v, MotionEvent event) {
+                drag(event, v);
+                return true;
             }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-
         });
 
 
+
+    }  /**  END OF ONCREATE  **/
+
+
+
+    /** Method to remove the Soft MenuBar **/
+    public void removeSoftMenuBar() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
+
+
+    /**
+     * Drag method for anything to enable anything to be scrolled around the screen.
+     *
+     * @param event
+     * @param v
+     */
+    float dx=0,dy=0,x=0,y=0;
+
+    public boolean drag(MotionEvent event, View v) {
+
+        switch (event.getAction()) {
+
+            case MotionEvent.ACTION_DOWN: {
+
+                x = event.getRawX();
+                y = event.getRawY();
+                dx = x - v.getX();
+                dy = y - v.getY();
+
+            }
+            break;
+
+
+            case MotionEvent.ACTION_MOVE: {
+
+                v.setX(event.getRawX() - dx);
+                v.setY(event.getRawY() - dy);
+
+            }
+            break;
+
+        }
+
+        return true;
+
+    }
+
 
 
     View.OnClickListener listenerText = new View.OnClickListener() {
@@ -305,7 +401,7 @@ public class CreateNew extends AppCompatActivity {
                         recyclerViewAppear(mRecyclerViewFonts);
 
                         // set the "Font" toggle button to "on"
-                        setToggleButtonToChecked(tbtnTextFont);
+                        setTextToggleButtonToChecked(tbtnTextFont);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
                         toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
@@ -321,7 +417,7 @@ public class CreateNew extends AppCompatActivity {
                         recyclerViewDisappear(mRecyclerViewFonts);
 
                         //  Set the "Font" toggle button to unchecked
-                        setToggleButtonToUnchecked(tbtnTextFont);
+                        setTextToggleButtonToUnchecked(tbtnTextFont);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
                         toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
@@ -353,7 +449,7 @@ public class CreateNew extends AppCompatActivity {
                         recyclerViewAppear(mRecyclerViewTextColours);
 
                         // set the "Colour" toggle button to "on"
-                        setToggleButtonToChecked(tbtnTextColour);
+                        setTextToggleButtonToChecked(tbtnTextColour);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
                         toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
@@ -369,7 +465,7 @@ public class CreateNew extends AppCompatActivity {
                         recyclerViewDisappear(mRecyclerViewTextColours);
 
                         //  Set the "Colour" toggle button to unchecked
-                        setToggleButtonToUnchecked(tbtnTextColour);
+                        setTextToggleButtonToUnchecked(tbtnTextColour);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
                         toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
@@ -399,7 +495,7 @@ public class CreateNew extends AppCompatActivity {
                         recyclerViewAppear(mRecyclerViewTexture);
 
                         // set the "Texture" toggle button to "on"
-                        setToggleButtonToChecked(tbtnTextTexture);
+                        setTextToggleButtonToChecked(tbtnTextTexture);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
                         toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
@@ -415,7 +511,7 @@ public class CreateNew extends AppCompatActivity {
                         recyclerViewDisappear(mRecyclerViewTexture);
 
                         //  Set the "Colour" toggle button to unchecked
-                        setToggleButtonToUnchecked(tbtnTextTexture);
+                        setTextToggleButtonToUnchecked(tbtnTextTexture);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
                         toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
@@ -441,7 +537,7 @@ public class CreateNew extends AppCompatActivity {
 
     public void toggleButtonChecked(RecyclerView recyclerView, ToggleButton toggleButton) {
 
-        if (toggleButton.isChecked()) {
+        if (toggleButton.isChecked() || recyclerView.getVisibility() == View.VISIBLE) {
 
             recyclerView.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
             recyclerView.setVisibility(View.GONE);
@@ -459,7 +555,6 @@ public class CreateNew extends AppCompatActivity {
         toggleButton.setTextColor(getResources().getColor(R.color.white));
         toggleButton.setBackgroundColor(getResources().getColor(R.color.black));
         toggleButton.setChecked(true);
-
     }
 
     /**
@@ -476,6 +571,58 @@ public class CreateNew extends AppCompatActivity {
         toggleButton.setChecked(false);
     }
 
+
+
+    /**
+     *
+     * If the toggle button is NOT checked, set it to
+     *
+     * @param toggleButton
+     */
+    public void setTextToggleButtonToUnchecked(ToggleButton toggleButton) {
+
+        toggleButton.setTypeface(RalewayMedium);
+        toggleButton.setTextColor(getResources().getColor(R.color.buttonOffWhite));
+        toggleButton.setBackgroundColor(getResources().getColor(R.color.textButtonOff));
+        toggleButton.setChecked(false);
+    }
+    public void setTextToggleButtonToChecked(ToggleButton toggleButton) {
+
+        toggleButton.setTypeface(RalewayBold);
+        toggleButton.setTextColor(getResources().getColor(R.color.buttonOnWhite));
+        toggleButton.setBackgroundColor(getResources().getColor(R.color.textButtonOn));
+        toggleButton.setChecked(true);
+    }
+
+    /**
+     *
+     * If the toggle button is NOT checked, set it to
+     *
+     * @param toggleButton
+     */
+    public void setBackgroundToggleButtonToUnchecked(ToggleButton toggleButton) {
+
+        toggleButton.setTypeface(RalewayMedium);
+        toggleButton.setTextColor(getResources().getColor(R.color.buttonOffWhite));
+        toggleButton.setBackgroundColor(getResources().getColor(R.color.backgroundButtonOff));
+        toggleButton.setChecked(false);
+    }
+    public void setBackgroundToggleButtonToChecked(ToggleButton toggleButton) {
+
+        toggleButton.setTypeface(RalewayBold);
+        toggleButton.setTextColor(getResources().getColor(R.color.buttonOnWhite));
+        toggleButton.setBackgroundColor(getResources().getColor(R.color.backgroundButtonOn));
+        toggleButton.setChecked(true);
+    }
+
+
+
+
+
+
+
+
+
     public void removeMenu (LinearLayout menuTitle) {
 
         if (menuTitle.getVisibility() == View.VISIBLE) {
@@ -485,17 +632,6 @@ public class CreateNew extends AppCompatActivity {
 
     }
 
-
-    /**
-     *  Should remove this as it's too general.
-     */
-    public void checkAllToggleStates() {
-
-        toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
-        toggleButtonChecked(mRecyclerViewTextColours, tbtnTextColour);
-        toggleButtonChecked(mRecyclerViewFonts, tbtnTextFont);
-
-    }
 
     /**
      *
@@ -528,44 +664,6 @@ public class CreateNew extends AppCompatActivity {
             recyclerView.setVisibility(View.GONE);
         }
 
-    }
-
-
-    /**
-     *
-     * @param event
-     * @return
-     */
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        // TODO Auto-generated method stub
-        scaleGestureDetector.onTouchEvent(event);
-        return true;
-    }
-
-
-    public class simpleOnScaleGestureListener extends
-            ScaleGestureDetector.SimpleOnScaleGestureListener {
-
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            // TODO Auto-generated method stub
-            float size = txtMainText.getTextSize();
-            Log.d("TextSizeStart", String.valueOf(size));
-
-            float factor = detector.getScaleFactor();
-            Log.d("Factor", String.valueOf(factor));
-
-
-            float product = size*factor;
-            Log.d("TextSize", String.valueOf(product));
-            txtMainText.setTextSize(TypedValue.COMPLEX_UNIT_PX, product);
-
-            size = txtMainText.getTextSize();
-            Log.d("TextSizeEnd", String.valueOf(size));
-            fontSize = (int)txtMainText.getTextSize();
-            return true;
-        }
     }
 
 
@@ -742,9 +840,9 @@ public class CreateNew extends AppCompatActivity {
                         Log.i("Menu Open", "Backgrounds - Standard");
 
                         /** Set the Toggle button "tbtnText" to unchecked  **/
-                        setToggleButtonToChecked(tbtnBackgroundStandard);
-                        setToggleButtonToUnchecked(tbtnBackgroundCamera);
-                        setToggleButtonToUnchecked(tbtnBackgroundOnline);
+                        setBackgroundToggleButtonToChecked(tbtnBackgroundStandard);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundCamera);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundOnline);
 
 
                         /** If the Text Fonts, Colours menu are visible, remove it  **/
@@ -752,7 +850,7 @@ public class CreateNew extends AppCompatActivity {
                         toggleButtonChecked(mRecyclerViewTextColours, tbtnTextColour);
 
                         /**  Remove the "Text" submenu  **/
-                        setToggleButtonToUnchecked(tbtnText);
+                        setTextToggleButtonToUnchecked(tbtnText);
 
                         if (menuFonts.getVisibility() == View.VISIBLE) {
                             menuFonts.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
@@ -799,9 +897,9 @@ public class CreateNew extends AppCompatActivity {
 
                         /** Set the Toggle button "tbtnText" to unchecked  **/
 
-                        setToggleButtonToUnchecked(tbtnBackgroundStandard);
-                        setToggleButtonToChecked(tbtnBackgroundCamera);
-                        setToggleButtonToUnchecked(tbtnBackgroundOnline);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundStandard);
+                        setBackgroundToggleButtonToChecked(tbtnBackgroundCamera);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundOnline);
 
 
                         /** If the Text Fonts, Colours menu are visible, remove it  **/
@@ -809,7 +907,7 @@ public class CreateNew extends AppCompatActivity {
                         toggleButtonChecked(mRecyclerViewTextColours, tbtnTextColour);
 
                         /**  Remove the "Text" submenu  **/
-                        setToggleButtonToUnchecked(tbtnText);
+                        setTextToggleButtonToUnchecked(tbtnText);
 
                         if (menuFonts.getVisibility() == View.VISIBLE) {
                             menuFonts.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
@@ -848,16 +946,16 @@ public class CreateNew extends AppCompatActivity {
                         new JSONAsyncBackgrounds().execute();
 
                         /** Set the Toggle button "tbtnText" to unchecked  **/
-                        setToggleButtonToUnchecked(tbtnBackgroundStandard);
-                        setToggleButtonToUnchecked(tbtnBackgroundCamera);
-                        setToggleButtonToChecked(tbtnBackgroundOnline);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundStandard);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundCamera);
+                        setBackgroundToggleButtonToChecked(tbtnBackgroundOnline);
 
                         /** If the Text Fonts, Colours menu are visible, remove it  **/
                         toggleButtonChecked(mRecyclerViewFonts, tbtnTextFont);
                         toggleButtonChecked(mRecyclerViewTextColours, tbtnTextColour);
 
                         /**  Remove the "Text" submenu  **/
-                        setToggleButtonToUnchecked(tbtnText);
+                        setTextToggleButtonToUnchecked(tbtnText);
 
                         if (menuFonts.getVisibility() == View.VISIBLE) {
                             menuFonts.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
@@ -893,6 +991,35 @@ public class CreateNew extends AppCompatActivity {
     };
 
 
+    public void TBAnimateOut(ToggleButton toggleButton) {
+
+        toggleButton.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
+        toggleButton.setVisibility(View.GONE);
+        setToggleButtonToUnchecked(toggleButton);
+
+    }
+
+    public void TBAnimateIn(ToggleButton toggleButton) {
+
+        toggleButton.setVisibility(View.VISIBLE);
+        toggleButton.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
+
+    }
+
+    public void BAnimateOut(Button button) {
+
+        button.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
+        button.setVisibility(View.GONE);
+
+    }
+
+    public void BAnimateIn(Button button) {
+
+        button.setVisibility(View.VISIBLE);
+        button.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
+
+    }
+
 
     /**
      * Button Actions for the text controls.  Will be changed soon.
@@ -902,131 +1029,125 @@ public class CreateNew extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
 
-                case R.id.btnMoveTextUp:
-                    Log.i("Button Press", "Move text UP");
-                    txtMainText.setY(txtMainText.getY() - 40f);
-                    fontPosition = (int) txtMainText.getY();
-                    break;
-
-
-                case R.id.btnMoveTextDown:
-                    Log.i("Button Press", "Move text DOWN");
-                    txtMainText.setY(txtMainText.getY() + 40f);
-                    fontPosition = (int) txtMainText.getY();
-                    break;
-
                 case R.id.tbtnShadow:
 
                     if (tbtnShadow.isChecked()) {
-                        txtMainText.setShadowLayer(20, 15, 15, Color.parseColor("#44000000"));
+                        txtMainText.setShadowLayer(25, 1, 1, Color.parseColor("#ffffffff"));
                     } else {
                         txtMainText.setShadowLayer(0, 0, 0, 0);
                     }
                     break;
 
 
+                case R.id.btnTextAlignLeft:
+                    txtMainText.setGravity(View.TEXT_ALIGNMENT_VIEW_END);
+                    break;
+
+
+                case R.id.btnTextAlignCenter:
+                    txtMainText.setGravity(Gravity.CENTER_HORIZONTAL);
+                    break;
+
+
+                case R.id.btnTextAlignRight:
+                    txtMainText.setGravity(View.TEXT_ALIGNMENT_VIEW_START);
+                    break;
+
+
                 case R.id.tbtnShowHideUI:
 
-                if (tbtnShowHideUI.isChecked()) {
+                    if (tbtnShowHideUI.isChecked()) {
 
-                    Log.i("Button Press", "UI - Hide");
+                        Log.i("Button Press", "UI - Hide");
 
-                    tbtnShowHideUI.setAlpha(0.4f);
+                        tbtnShowHideUI.setAlpha(0.4f);
 
-                    tbtnText.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
-                    tbtnText.setVisibility(View.GONE);
-                    setToggleButtonToUnchecked(tbtnText);
-
-                    tbtnBackground.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
-                    tbtnBackground.setVisibility(View.GONE);
-                    setToggleButtonToUnchecked(tbtnBackground);
-
-                    tbtnTextFont.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
-                    tbtnTextFont.setVisibility(View.GONE);
-                    setToggleButtonToUnchecked(tbtnTextFont);
-
-                    tbtnTextColour.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
-                    tbtnTextColour.setVisibility(View.GONE);
-                    setToggleButtonToUnchecked(tbtnTextColour);
-
-                    btnOverlay.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
-                    btnOverlay.setVisibility(View.GONE);
-
-                    btnBorder.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
-                    btnBorder.setVisibility(View.GONE);
-
-                    btnShare.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
-                    btnShare.setVisibility(View.GONE);
-
-                    txtInput.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_out));
-                    txtInput.setVisibility(View.INVISIBLE);
-                    btnMoveTextUp.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_left_out));
-                    btnMoveTextUp.setVisibility(View.GONE);
-                    btnMoveTextDown.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_left_out));
-                    btnMoveTextDown.setVisibility(View.GONE);
-                    tbtnShadow.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_left_out));
-                    tbtnShadow.setVisibility(View.GONE);
+                        TBAnimateOut(tbtnText);
+                        TBAnimateOut(tbtnBackground);
+                        TBAnimateOut(tbtnTextFont);
+                        TBAnimateOut(tbtnTextColour);
+                        BAnimateOut(btnOverlay);
+                        BAnimateOut(btnBorder);
+                        BAnimateOut(btnShare);
 
 
-                    if (mRecyclerViewFonts.getVisibility() == View.VISIBLE) {
-                        mRecyclerViewFonts.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
-                        mRecyclerViewFonts.setVisibility(View.GONE);
-                    }
+                        llTextControls1.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
+                        llTextControls1.setVisibility(View.GONE);
+                        llTextControls2.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
+                        llTextControls2.setVisibility(View.GONE);
 
-                    if (mRecyclerViewTextColours.getVisibility() == View.VISIBLE) {
-                        mRecyclerViewTextColours.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
-                        mRecyclerViewTextColours.setVisibility(View.GONE);
-                    }
+                        txtInput.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_out));
+                        txtInput.setVisibility(View.INVISIBLE);
 
-                    if (mRecyclerViewBackground.getVisibility() == View.VISIBLE) {
-                        mRecyclerViewBackground.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
-                        mRecyclerViewBackground.setVisibility(View.GONE);
-                    }
+                        tbtnShadow.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_left_out));
+                        tbtnShadow.setVisibility(View.GONE);
 
-                    if (mRecyclerViewTexture.getVisibility() == View.VISIBLE) {
-                        mRecyclerViewTexture.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
-                        mRecyclerViewTexture.setVisibility(View.GONE);
-                    }
+                        btnTextAlignLeft.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_left_out));
+                        btnTextAlignLeft.setVisibility(View.GONE);
 
-                    if (menuFonts.getVisibility() == View.VISIBLE) {
+                        btnTextAlignCenter.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_left_out));
+                        btnTextAlignCenter.setVisibility(View.GONE);
 
-                        tbtnTextFont.setChecked(false);
-                        tbtnTextColour.setChecked(false);
-                        tbtnTextTexture.setChecked(false);
-                        tbtnTextEffects.setChecked(false);
-                        menuFonts.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
-                        menuFonts.setVisibility(View.GONE);
+                        btnTextAlignRight.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_left_out));
+                        btnTextAlignRight.setVisibility(View.GONE);
 
-                    }
+                        toggleButtonChecked(mRecyclerViewFonts, tbtnTextFont);
+                        toggleButtonChecked(mRecyclerViewTextColours, tbtnTextColour);
+                        toggleButtonChecked(mRecyclerViewTexture, tbtnTextTexture);
+                        toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
 
+                        if (menuFonts.getVisibility() == View.VISIBLE) {
+
+                            menuFonts.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
+                            menuFonts.setVisibility(View.GONE);
+                            tbtnTextFont.setChecked(false);
+                            tbtnTextColour.setChecked(false);
+                            tbtnTextTexture.setChecked(false);
+                            tbtnTextEffects.setChecked(false);
+                        }
+
+                        if (menuBackgrounds.getVisibility() == View.VISIBLE) {
+
+                            menuBackgrounds.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
+                            menuBackgrounds.setVisibility(View.GONE);
+                            tbtnBackgroundStandard.setChecked(false);
+                            tbtnBackgroundCamera.setChecked(false);
+                            tbtnBackgroundOnline.setChecked(false);
+                        }
 
                 } else {
 
-                    Log.i("Button Press", "UI - Show");
+                        Log.i("Button Press", "UI - Show");
 
                     tbtnShowHideUI.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.ui_fadein));
                     tbtnShowHideUI.setAlpha(1);
 
-                    tbtnText.setVisibility(View.VISIBLE);
-                    tbtnText.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
-                    tbtnBackground.setVisibility(View.VISIBLE);
-                    tbtnBackground.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
-                    btnOverlay.setVisibility(View.VISIBLE);
-                    btnOverlay.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
-                    btnBorder.setVisibility(View.VISIBLE);
-                    btnBorder.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
-                    btnShare.setVisibility(View.VISIBLE);
-                    btnShare.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
+                        TBAnimateIn(tbtnText);
+                        TBAnimateIn(tbtnBackground);
+                        TBAnimateIn(btnOverlay);
+                        TBAnimateIn(tbtnText);
+                        BAnimateIn(btnBorder);
+                        BAnimateIn(btnShare);
+
+                        llTextControls1.setVisibility(View.VISIBLE);
+                        llTextControls1.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadein));
+
+                        llTextControls2.setVisibility(View.VISIBLE);
+                        llTextControls2.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadein));
 
                     txtInput.setVisibility(View.VISIBLE);
                     txtInput.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_in));
-                    btnMoveTextUp.setVisibility(View.VISIBLE);
-                    btnMoveTextUp.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_right_in));
-                    btnMoveTextDown.setVisibility(View.VISIBLE);
-                    btnMoveTextDown.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_right_in));
                     tbtnShadow.setVisibility(View.VISIBLE);
                     tbtnShadow.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_right_in));
 
+                        btnTextAlignLeft.setVisibility(View.VISIBLE);
+                        btnTextAlignLeft.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_right_in));
+
+                        btnTextAlignCenter.setVisibility(View.VISIBLE);
+                        btnTextAlignCenter.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_right_in));
+
+                        btnTextAlignRight.setVisibility(View.VISIBLE);
+                        btnTextAlignRight.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_right_in));
                 }
                 break;
 
@@ -1041,10 +1162,14 @@ public class CreateNew extends AppCompatActivity {
                         Log.i("Menu Open", "Background");
 
                         /** Set the Toggle button "tbtnText" to checked  **/
-                        setToggleButtonToChecked(tbtnBackground);
+                        setBackgroundToggleButtonToChecked(tbtnBackground);
                         toggleButtonChecked(mRecyclerViewFonts, tbtnText);
                         removeMenu(menuFonts);
 
+                        /** Set the Background menu ToggleButton's to unchecked  **/
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundStandard);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundCamera);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundOnline);
 
                         /**  Display the "Text" submenu  **/
                         menuBackgrounds.setVisibility(View.VISIBLE);
@@ -1065,7 +1190,10 @@ public class CreateNew extends AppCompatActivity {
                         Log.i("Menu Close", "Backgrounds");
 
                         /** Set the Toggle button "tbtnBackground" to unchecked  **/
-                        setToggleButtonToUnchecked(tbtnBackground);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackground);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundStandard);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundCamera);
+                        setBackgroundToggleButtonToUnchecked(tbtnBackgroundOnline);
 
                         /**  Remove the "Background" submenu  **/
                         menuBackgrounds.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
@@ -1100,7 +1228,8 @@ public class CreateNew extends AppCompatActivity {
                         Log.i("Menu Open", "Text");
 
                         /** Set the Toggle button "tbtnText" to checked  **/
-                        setToggleButtonToChecked(tbtnText);
+                        setTextToggleButtonToChecked(tbtnText);
+
                         toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
                         removeMenu(menuBackgrounds);
 
@@ -1124,11 +1253,23 @@ public class CreateNew extends AppCompatActivity {
                         Log.i("Menu Close", "Text");
 
                         /** Set the Toggle button "tbtnText" to unchecked  **/
-                        setToggleButtonToUnchecked(tbtnText);
+//                        setToggleButtonToUnchecked(tbtnText);
+
+                        tbtnText.setTypeface(RalewayMedium);
+                        tbtnText.setTextColor(getResources().getColor(R.color.white_transparent_80));
+                        tbtnText.setBackgroundColor(getResources().getColor(R.color.textButtonOff));
+                        tbtnText.setChecked(false);
+
 
                         /**  Remove the "Text" submenu  **/
                         menuFonts.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
                         menuFonts.setVisibility(View.GONE);
+
+                        /** Set the Toggle Buttons to off for the above menu  **/
+                        setTextToggleButtonToUnchecked(tbtnTextFont);
+                        setTextToggleButtonToUnchecked(tbtnTextColour);
+                        setTextToggleButtonToUnchecked(tbtnTextTexture);
+                        setTextToggleButtonToUnchecked(tbtnTextEffects);
 
                         toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
                         toggleButtonChecked(mRecyclerViewTextColours, tbtnTextColour);
@@ -1171,6 +1312,7 @@ public class CreateNew extends AppCompatActivity {
             AdapterBackground adapterBackground = new AdapterBackground(activity, ListBackgrounds);
             mRecyclerViewBackground.setAdapter(adapterBackground);
             pd.dismiss();
+            removeSoftMenuBar();
         }
     }
 
@@ -1204,24 +1346,12 @@ public class CreateNew extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        removeSoftMenuBar();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        removeSoftMenuBar();
     }
 }

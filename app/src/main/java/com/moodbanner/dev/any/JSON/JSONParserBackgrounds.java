@@ -1,6 +1,6 @@
 package com.moodbanner.dev.any.JSON;
 
-import com.moodbanner.dev.any.backgrounds.ValueBackground;
+import com.moodbanner.dev.any.Backgrounds.ValueBackground;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,11 +23,9 @@ public class JSONParserBackgrounds {
 
                 valueBackground = new ValueBackground();
 
-                int id = post.getInt("id");
                 String name = post.getString("name");
                 String imageURL = post.getString("imageURL");
 
-                valueBackground.setId(id);
                 valueBackground.setName(name);
                 valueBackground.setImageURL(imageURL);
 

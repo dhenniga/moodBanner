@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CreateNew"/>
+        <activity android:name=".Create.CreateNew"/>
         <activity android:name=".EditExisting"/>
         <activity android:name=".Gallery"/>
     </application>

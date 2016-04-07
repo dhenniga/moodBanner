@@ -1,37 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="80dp"
     android:layout_gravity="bottom"
-    android:gravity="center_vertical"
+    android:gravity="bottom"
+    android:orientation="vertical"
     android:id="@+id/menubar_container"
     tools:context="com.moodbanner.dev.any.Menubar">
 
+
+
     <LinearLayout
+        android:id="@+id/menuBackgrounds"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="40dp"
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_above="@+id/mainMenuBase">
+
+        <ToggleButton
+            android:id="@+id/tbtnBackgroundStandard"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/backgroundButtonOff"
+            android:textOn="Standard"
+            android:textOff="Standard"
+            android:textSize="10sp"
+            android:textColor="#66ffffff" />
+
+        <ToggleButton
+            android:id="@+id/tbtnBackgroundCamera"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/backgroundButtonOff"
+            android:textOn="Camera"
+            android:textOff="Camera"
+            android:textSize="10sp"
+            android:textColor="#66ffffff" />
+
+
+        <ToggleButton
+            android:id="@+id/tbtnBackgroundOnline"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/backgroundButtonOff"
+            android:textOn="Online"
+            android:textOff="Online"
+            android:textSize="10sp"
+            android:textColor="#66ffffff" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/menuFonts"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:weightSum="4"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_above="@+id/mainMenuBase">
+
+        <ToggleButton
+            android:id="@+id/tbtnTextFont"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/textButtonOff"
+            android:textOn="font"
+            android:textOff="font"
+            android:textSize="10sp"
+            android:textColor="#66ffffff" />
+
+        <ToggleButton
+            android:id="@+id/tbtnTextColour"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/textButtonOff"
+            android:textOn="Colour"
+            android:textOff="Colour"
+            android:textSize="10sp"
+            android:textColor="#66ffffff" />
+
+        <ToggleButton
+            android:id="@+id/tbtnTextTexture"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/textButtonOff"
+            android:textOn="Texture"
+            android:textOff="Texture"
+            android:textSize="10sp"
+            android:textColor="#66ffffff" />
+
+        <ToggleButton
+            android:id="@+id/tbtnTextEffects"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/textButtonOff"
+            android:textOn="Effects"
+            android:textOff="Effects"
+            android:textSize="10sp"
+            android:textColor="#22ffffff" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/mainMenuBase"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:weightSum="5"
         android:orientation="horizontal">
 
     <ToggleButton
-        android:id="@+id/tbtnFont"
+        android:id="@+id/tbtnText"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.8"
-        android:background="@drawable/text_input_background"
-        android:textOn="font"
-        android:textOff="font"
+        android:background="#99990000"
+        android:textOn="Text"
+        android:textOff="Text"
         android:textSize="10sp"
         android:textColor="#66ffffff" />
 
     <ToggleButton
         android:id="@+id/tbtnBackground"
-        android:layout_toEndOf="@+id/tbtnFont"
+        android:layout_toEndOf="@+id/tbtnText"
         android:layout_width="0dp"
         android:layout_weight="1.4"
         android:layout_height="match_parent"
-        android:background="@drawable/text_input_background"
+        android:background="@color/backgroundButtonOff"
         android:textOn="Background"
         android:textOff="Background"
         android:textSize="10sp"
@@ -74,4 +181,5 @@
         android:textColor="#22ffffff" />
 </LinearLayout>
 
-</RelativeLayout>
+
+</LinearLayout>

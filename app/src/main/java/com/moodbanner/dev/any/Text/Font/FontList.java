@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.moodbanner.dev.any.Text.ValueFont;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

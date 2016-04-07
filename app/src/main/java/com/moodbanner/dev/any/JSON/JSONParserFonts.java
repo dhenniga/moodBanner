@@ -1,6 +1,6 @@
 package com.moodbanner.dev.any.JSON;
 
-import com.moodbanner.dev.any.Fonts.ValueFont;
+import com.moodbanner.dev.any.Text.Font.ValueFont;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

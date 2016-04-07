@@ -5,149 +5,16 @@
     android:layout_height="match_parent"
     android:id="@+id/create_new_container"
     android:background="@drawable/create_background_gradient"
-    tools:context="com.moodbanner.dev.any.CreateNew">
+    tools:context=".Create.CreateNew">
 
-    <AbsoluteLayout
+
+    <LinearLayout
+        android:id="@+id/topbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/createnew_background_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
-
-    </AbsoluteLayout>
-
-    <include layout="@layout/activity_menubar"
-        android:layout_height="50dp"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
-        />
-
-    <RelativeLayout
-        android:id="@+id/main_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:scaleType="centerCrop"
-        >
-
-        <AbsoluteLayout
-            android:layout_width="200dp"
-            android:layout_height="35dp"
-            android:layout_below="@+id/tempButtons"
-            android:background="#88000000"
-            android:rotation="270"
-
-            android:layout_marginLeft="-73dp"
-            android:layout_marginTop="84dp">
-
-        <SeekBar
-            android:id="@+id/seekBar1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_margin="0dp"
-            android:progress="200"
-            android:max="400"
-            />
-
-        </AbsoluteLayout>
-
-
-        <LinearLayout
-            android:id="@+id/tempButtons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/topbar"
-            android:layout_margin="10dp"
-            android:orientation="vertical">
-
-
-
-            <Button
-                android:id="@+id/btnMoveTextUp"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:textColor="@color/white_transparent_80"
-                android:textSize="12dp"
-                android:background="@drawable/text_input_background"
-                android:text="u"/>
-
-            <Button
-                android:id="@+id/btnMoveTextDown"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:textSize="12dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/white_transparent_80"
-                android:background="@drawable/text_input_background"
-                android:text="d"/>
-
-            <ToggleButton
-                android:id="@+id/tbtnShadow"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:textSize="12dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/white_transparent_80"
-                android:background="@drawable/text_input_background"
-                android:textOn="S"
-                android:textOff="S"/>
-
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/txtMainText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:textSize="90sp"
-            android:textColor="@color/white"
-            android:text="This is some testing text"
-            android:gravity="center"
-            android:lineSpacingExtra="-30dp"
-            android:hint="Enter Text"
-            android:textColorHint="@color/white"
-            />
-
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewBackgrounds"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="110dp"
-            />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewFonts"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@null"
-            />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewFontColours"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="80dp"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@null"
-            />
-
-        <LinearLayout
-            android:id="@+id/topbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:weightSum="2"
-            android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:weightSum="2"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/etInput"
@@ -159,7 +26,7 @@
             android:textSize="14sp"
             android:background="@drawable/text_input_background"
             android:layout_alignParentTop="true"
-            android:hint="Enter Text"
+            android:hint="This is some Testing Text"
             android:capitalize="sentences"
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
@@ -167,21 +34,308 @@
             android:textColor="@color/white"
             />
 
-            <ToggleButton
-                android:id="@+id/tbtnShowHideUI"
-                android:textOn=""
-                android:textOff=""
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_check"
-                android:textColor="@color/white_transparent_80"
-                android:textSize="12dp" />
+        <ToggleButton
+            android:id="@+id/tbtnShowHideUI"
+            android:textOn=""
+            android:textOff=""
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/toggle_check"
+            android:textColor="@color/white_transparent_80"
+            android:textSize="12dp" />
 
-        </LinearLayout>
+    </LinearLayout>
 
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewBackgrounds"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="80dp"
+        android:layout_height="110dp"
+        android:visibility="gone"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewFonts"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="80dp"
+        android:layout_height="80dp"
+        android:background="@null"
+        android:visibility="gone"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewTextColours"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@null"
+        android:visibility="gone"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewTextures"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="80dp"
+        android:layout_height="110dp"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:id="@+id/tempButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/llTextControls2"
+        android:visibility="visible"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <ToggleButton
+            android:id="@+id/tbtnShadow"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="35dp"
+            android:textSize="12dp"
+            android:textColor="@color/white_transparent_80"
+            android:background="@drawable/text_input_background"
+            android:layout_gravity="left"
+            android:textOn="S"
+            android:textOff="S"/>
+
+        <Button
+            android:id="@+id/btnTextAlignLeft"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="35dp"
+            android:textSize="12dp"
+            android:textColor="@color/white_transparent_80"
+            android:background="@drawable/text_input_background"
+            android:text="L"
+            />
+
+        <Button
+            android:id="@+id/btnTextAlignCenter"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="35dp"
+            android:textSize="12dp"
+            android:textColor="@color/white_transparent_80"
+            android:background="@drawable/text_input_background"
+            android:text="C"
+            />
+
+        <Button
+            android:id="@+id/btnTextAlignRight"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="35dp"
+            android:textSize="12dp"
+            android:textColor="@color/white_transparent_80"
+            android:background="@drawable/text_input_background"
+            android:text="R"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llTextControls1"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/topbar"
+        android:elevation="200dp"
+        android:orientation="horizontal"
+        android:background="#99000000"
+        android:weightSum="2">
+
+    <RelativeLayout
+        android:id="@+id/seekbarHeightContainer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+
+        <SeekBar
+            android:id="@+id/sbHeight"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_above="@+id/txtHeight"
+            android:progress="100"
+            android:max="200"/>
+
+        <TextView
+            android:id="@+id/txtHeight"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:layout_marginTop="5dp"
+            android:text="Height"
+            android:textColor="#99ffffff"
+            android:layout_alignParentBottom="true"
+            android:textSize="8dp"
+            android:textAllCaps="true"
+            android:gravity="center_horizontal"/>
 
 
     </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/seekbarSizeContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/txtSize"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_marginTop="5dp"
+                android:text="Size"
+                android:textColor="#99ffffff"
+                android:layout_alignParentBottom="true"
+                android:textSize="8dp"
+                android:textAllCaps="true"
+                android:gravity="center_horizontal"/>
+
+            <SeekBar
+                android:id="@+id/sbSize"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:max="200"
+                android:layout_above="@+id/txtSize"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llTextControls2"
+        android:layout_width="match_parent"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/llTextControls1"
+        android:elevation="200dp"
+        android:background="#99000000"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <RelativeLayout
+            android:id="@+id/seekbarWidthContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/txtWidth"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_marginTop="5dp"
+                android:text="Width"
+                android:textColor="#99ffffff"
+                android:layout_alignParentBottom="true"
+                android:textSize="8dp"
+                android:textAllCaps="true"
+                android:gravity="center_horizontal"/>
+
+            <SeekBar
+                android:id="@+id/sbWidth"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:max="2000"
+                android:layout_above="@+id/txtWidth"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/seekbarAlphaContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+            <SeekBar
+                android:id="@+id/sbAlpha"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_above="@+id/txtAlpha"
+                android:progress="100"
+                android:max="100"/>
+
+            <TextView
+                android:id="@+id/txtAlpha"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_marginTop="5dp"
+                android:text="Opacity"
+                android:textColor="#99ffffff"
+                android:layout_alignParentBottom="true"
+                android:textSize="8dp"
+                android:textAllCaps="true"
+                android:gravity="center_horizontal"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/main_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:elevation="-105dp"
+        android:background="#11ffffff"
+        android:layout_marginBottom="0dp"
+        >
+
+        <AbsoluteLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="-102dp"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/createnew_background_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+
+        </AbsoluteLayout>
+
+
+    <TextView
+            android:id="@+id/txtMainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="80sp"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:text="This is some testing text"
+            android:lineSpacingExtra="-30dp"
+            android:hint="This is some testing text"
+            android:textColorHint="@color/white"
+            />
+
+
+    </RelativeLayout>
+
+    <include layout="@layout/activity_menubar"
+        android:layout_height="80dp"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        />
+
 
 </RelativeLayout>
