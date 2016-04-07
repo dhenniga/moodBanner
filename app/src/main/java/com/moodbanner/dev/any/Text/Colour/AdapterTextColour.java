@@ -1,4 +1,4 @@
-package com.moodbanner.dev.any.Fonts;
+package com.moodbanner.dev.any.Text.Colour;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by dhen0003 on 28/03/16.
  */
-public class AdapterFontColour extends RecyclerView.Adapter<AdapterFontColour.ViewHolder> {
+public class AdapterTextColour extends RecyclerView.Adapter<AdapterTextColour.ViewHolder> {
 
 
     private Context mContext;
@@ -24,7 +24,7 @@ public class AdapterFontColour extends RecyclerView.Adapter<AdapterFontColour.Vi
     private LayoutInflater inflater;
 
 
-    public AdapterFontColour(Context context, List<ValueFontColour> colourList) {
+    public AdapterTextColour(Context context, List<ValueFontColour> colourList) {
         this.colourList = colourList;
         this.inflater = LayoutInflater.from(context);
         this.mContext = context;
@@ -47,7 +47,7 @@ public class AdapterFontColour extends RecyclerView.Adapter<AdapterFontColour.Vi
 
     // Create new views (invoked by the layout manager)
     @Override
-    public AdapterFontColour.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterTextColour.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.activity_font_colours, parent, false);
         return new ViewHolder(view);
     }

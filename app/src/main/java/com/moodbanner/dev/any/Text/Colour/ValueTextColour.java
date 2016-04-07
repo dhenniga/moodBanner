@@ -1,15 +1,9 @@
-package com.moodbanner.dev.any.Fonts;
+package com.moodbanner.dev.any.Text.Colour;
 
 
-public class ValueFontColour {
+public class ValueTextColour {
 
     private String colourName, colourHexCode;
-
-//    public ValueFontColour(String colour_name, String colour_hex_code)
-//    {
-//        this.colourName   = colour_name;
-//        this.colourHexCode = colour_hex_code;
-//    }
 
     public String getColourName() {
         return colourName;
@@ -27,6 +21,5 @@ public class ValueFontColour {
         this.colourHexCode = colourHexCode;
     }
 
-//    public ValueFontColour() {};
 
 }
