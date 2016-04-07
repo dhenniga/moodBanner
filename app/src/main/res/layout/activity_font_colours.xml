@@ -7,7 +7,7 @@
     android:id="@+id/card_view"
     cardview:cardCornerRadius="0dp"
     cardview:cardElevation="0dp"
-    cardview:cardBackgroundColor="#000000">
+    cardview:cardBackgroundColor="@color/menuButtonOff">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,7 +34,6 @@
         android:textColor="#99ffffff"
         android:gravity="top"
         android:paddingTop="0dp"
-        android:text="fghdfgdgh dfh "
         android:paddingLeft="3dp"
         android:lines="1"
         android:singleLine="true"

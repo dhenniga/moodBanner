@@ -59,6 +59,8 @@ import com.moodbanner.dev.any.listener.RecyclerClickListener;
 import com.moodbanner.dev.any.listener.RecyclerTouchListener;
 import com.squareup.picasso.Picasso;
 
+import com.moodbanner.dev.any.multiTouch.MultiTouchListener;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -309,17 +311,19 @@ public class CreateNew extends AppCompatActivity {
         seekBarAlphaController.seekBarMethod(seekBarAlpha, txtMainText);
 
 
-        /**
-         *   OnTouch listener for moving the txtMainText around the screen
-         */
-        txtMainText.setOnTouchListener(new TextView.OnTouchListener() {
+//        /**
+//         *   OnTouch listener for moving the txtMainText around the screen
+//         */
+//        txtMainText.setOnTouchListener(new TextView.OnTouchListener() {
+//
+//            public boolean onTouch(View v, MotionEvent event) {
+//                drag(event, v);
+//                return true;
+//            }
+//        });
 
-            public boolean onTouch(View v, MotionEvent event) {
-                drag(event, v);
-                return true;
-            }
-        });
 
+        txtMainText.setOnTouchListener(new MultiTouchListener());
 
 
     }  /**  END OF ONCREATE  **/
@@ -338,42 +342,42 @@ public class CreateNew extends AppCompatActivity {
     }
 
 
-    /**
-     * Drag method for anything to enable anything to be scrolled around the screen.
-     *
-     * @param event
-     * @param v
-     */
-    float dx=0,dy=0,x=0,y=0;
-
-    public boolean drag(MotionEvent event, View v) {
-
-        switch (event.getAction()) {
-
-            case MotionEvent.ACTION_DOWN: {
-
-                x = event.getRawX();
-                y = event.getRawY();
-                dx = x - v.getX();
-                dy = y - v.getY();
-
-            }
-            break;
-
-
-            case MotionEvent.ACTION_MOVE: {
-
-                v.setX(event.getRawX() - dx);
-                v.setY(event.getRawY() - dy);
-
-            }
-            break;
-
-        }
-
-        return true;
-
-    }
+//    /**
+//     * Drag method for anything to enable anything to be scrolled around the screen.
+//     *
+//     * @param event
+//     * @param v
+//     */
+//    float dx=0,dy=0,x=0,y=0;
+//
+//    public boolean drag(MotionEvent event, View v) {
+//
+//        switch (event.getAction()) {
+//
+//            case MotionEvent.ACTION_DOWN: {
+//
+//                x = event.getRawX();
+//                y = event.getRawY();
+//                dx = x - v.getX();
+//                dy = y - v.getY();
+//
+//            }
+//            break;
+//
+//
+//            case MotionEvent.ACTION_MOVE: {
+//
+//                v.setX(event.getRawX() - dx);
+//                v.setY(event.getRawY() - dy);
+//
+//            }
+//            break;
+//
+//        }
+//
+//        return true;
+//
+//    }
 
 
 
@@ -387,7 +391,6 @@ public class CreateNew extends AppCompatActivity {
                     if (tbtnTextFont.isChecked()) {
 
                         mRecyclerViewFonts = (RecyclerView) findViewById(R.id.recyclerViewFonts);
-                        ivFontThumb = (ImageView) findViewById(R.id.ivFontThumb);
                         LinearLayoutManager llmFont = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
 
                         ListFonts = new FontList().listDirectoryFonts(getApplicationContext(), "fonts");
@@ -404,25 +407,24 @@ public class CreateNew extends AppCompatActivity {
                         setTextToggleButtonToChecked(tbtnTextFont);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
-                        toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
-                        toggleButtonChecked(mRecyclerViewTextColours, tbtnTextColour);
-                        toggleButtonChecked(mRecyclerViewTexture, tbtnTextTexture);
-
+                        recyclerViewDisappear(mRecyclerViewBackground, tbtnBackground);
+                        recyclerViewDisappear(mRecyclerViewTextColours, tbtnTextColour);
+                        recyclerViewDisappear(mRecyclerViewTexture, tbtnTextTexture);
 
                     } else {
 
                         Log.i("Button Press", "Menu Close - Font");
 
                         //  Remove the recyclerView for the Text | Fonts selection
-                        recyclerViewDisappear(mRecyclerViewFonts);
+                        recyclerViewDisappear(mRecyclerViewFonts, tbtnTextFont);
 
                         //  Set the "Font" toggle button to unchecked
                         setTextToggleButtonToUnchecked(tbtnTextFont);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
-                        toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
-                        toggleButtonChecked(mRecyclerViewTextColours, tbtnTextColour);
-                        toggleButtonChecked(mRecyclerViewTexture, tbtnTextTexture);
+                        recyclerViewDisappear(mRecyclerViewBackground, tbtnBackground);
+                        recyclerViewDisappear(mRecyclerViewTextColours, tbtnTextColour);
+                        recyclerViewDisappear(mRecyclerViewTexture, tbtnTextTexture);
 
                     }
 
@@ -452,9 +454,9 @@ public class CreateNew extends AppCompatActivity {
                         setTextToggleButtonToChecked(tbtnTextColour);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
-                        toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
-                        toggleButtonChecked(mRecyclerViewFonts, tbtnTextFont);
-                        toggleButtonChecked(mRecyclerViewTexture, tbtnTextTexture);
+                        recyclerViewDisappear(mRecyclerViewBackground, tbtnBackground);
+                        recyclerViewDisappear(mRecyclerViewFonts, tbtnTextFont);
+                        recyclerViewDisappear(mRecyclerViewTexture, tbtnTextTexture);
 
 
                     } else {
@@ -462,15 +464,15 @@ public class CreateNew extends AppCompatActivity {
                         Log.i("Button Press", "Menu Close - Colour");
 
                         // Remove the recyclerView for the Text | Colours selection
-                        recyclerViewDisappear(mRecyclerViewTextColours);
+                        recyclerViewDisappear(mRecyclerViewTextColours, tbtnTextColour);
 
                         //  Set the "Colour" toggle button to unchecked
                         setTextToggleButtonToUnchecked(tbtnTextColour);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
-                        toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
-                        toggleButtonChecked(mRecyclerViewFonts, tbtnTextFont);
-                        toggleButtonChecked(mRecyclerViewTexture, tbtnTextTexture);
+                        recyclerViewDisappear(mRecyclerViewBackground, tbtnBackground);
+                        recyclerViewDisappear(mRecyclerViewFonts, tbtnTextFont);
+                        recyclerViewDisappear(mRecyclerViewTexture, tbtnTextTexture);
 
                     }
 
@@ -498,9 +500,9 @@ public class CreateNew extends AppCompatActivity {
                         setTextToggleButtonToChecked(tbtnTextTexture);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
-                        toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
-                        toggleButtonChecked(mRecyclerViewTextColours, tbtnTextColour);
-                        toggleButtonChecked(mRecyclerViewFonts, tbtnTextFont);
+                        recyclerViewDisappear(mRecyclerViewBackground, tbtnBackground);
+                        recyclerViewDisappear(mRecyclerViewFonts, tbtnTextFont);
+                        recyclerViewDisappear(mRecyclerViewTextColours, tbtnTextColour);
 
 
                     } else {
@@ -508,15 +510,16 @@ public class CreateNew extends AppCompatActivity {
                         Log.i("Button Press", "Menu Close - Texture");
 
                         // Remove the recyclerView for the Text | Colours selection
-                        recyclerViewDisappear(mRecyclerViewTexture);
+                        recyclerViewDisappear(mRecyclerViewTexture, tbtnTextTexture);
 
                         //  Set the "Colour" toggle button to unchecked
                         setTextToggleButtonToUnchecked(tbtnTextTexture);
 
                         // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
-                        toggleButtonChecked(mRecyclerViewBackground, tbtnBackground);
-                        toggleButtonChecked(mRecyclerViewTextColours, tbtnTextColour);
-                        toggleButtonChecked(mRecyclerViewFonts, tbtnTextFont);
+                        recyclerViewDisappear(mRecyclerViewBackground, tbtnBackground);
+                        recyclerViewDisappear(mRecyclerViewFonts, tbtnTextFont);
+                        recyclerViewDisappear(mRecyclerViewTextColours, tbtnTextColour);
+
 
                     }
 
@@ -583,14 +586,14 @@ public class CreateNew extends AppCompatActivity {
 
         toggleButton.setTypeface(RalewayMedium);
         toggleButton.setTextColor(getResources().getColor(R.color.buttonOffWhite));
-        toggleButton.setBackgroundColor(getResources().getColor(R.color.textButtonOff));
+        toggleButton.setBackgroundColor(getResources().getColor(R.color.menuButtonOff));
         toggleButton.setChecked(false);
     }
     public void setTextToggleButtonToChecked(ToggleButton toggleButton) {
 
         toggleButton.setTypeface(RalewayBold);
-        toggleButton.setTextColor(getResources().getColor(R.color.buttonOnWhite));
-        toggleButton.setBackgroundColor(getResources().getColor(R.color.textButtonOn));
+        toggleButton.setTextColor(getResources().getColor(R.color.buttonOnBlack));
+        toggleButton.setBackgroundColor(getResources().getColor(R.color.menuButtonOn));
         toggleButton.setChecked(true);
     }
 
@@ -604,14 +607,14 @@ public class CreateNew extends AppCompatActivity {
 
         toggleButton.setTypeface(RalewayMedium);
         toggleButton.setTextColor(getResources().getColor(R.color.buttonOffWhite));
-        toggleButton.setBackgroundColor(getResources().getColor(R.color.backgroundButtonOff));
+        toggleButton.setBackgroundColor(getResources().getColor(R.color.menuButtonOff));
         toggleButton.setChecked(false);
     }
     public void setBackgroundToggleButtonToChecked(ToggleButton toggleButton) {
 
         toggleButton.setTypeface(RalewayBold);
-        toggleButton.setTextColor(getResources().getColor(R.color.buttonOnWhite));
-        toggleButton.setBackgroundColor(getResources().getColor(R.color.backgroundButtonOn));
+        toggleButton.setTextColor(getResources().getColor(R.color.buttonOnBlack));
+        toggleButton.setBackgroundColor(getResources().getColor(R.color.menuButtonOn));
         toggleButton.setChecked(true);
     }
 
@@ -645,6 +648,7 @@ public class CreateNew extends AppCompatActivity {
 
             recyclerView.setVisibility(View.VISIBLE);
             recyclerView.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadein));
+
         }
 
     }
@@ -656,12 +660,13 @@ public class CreateNew extends AppCompatActivity {
      *
      * @param recyclerView
      */
-    public void recyclerViewDisappear (RecyclerView recyclerView) {
+    public void recyclerViewDisappear (RecyclerView recyclerView, ToggleButton toggleButton) {
 
         if (recyclerView.getVisibility() == View.VISIBLE) {
 
             recyclerView.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.fadeout));
             recyclerView.setVisibility(View.GONE);
+            toggleButton.setChecked(false);
         }
 
     }
@@ -870,7 +875,7 @@ public class CreateNew extends AppCompatActivity {
                         /** Set the Toggle button "tbtnText" to unchecked  **/
                         setToggleButtonToUnchecked(tbtnBackgroundStandard);
 
-                        recyclerViewDisappear(mRecyclerViewBackground);
+                        recyclerViewDisappear(mRecyclerViewBackground, tbtnBackground);
 
                     }
 
@@ -927,7 +932,7 @@ public class CreateNew extends AppCompatActivity {
                         /** Set the Toggle button "tbtnText" to unchecked  **/
                         setToggleButtonToUnchecked(tbtnBackgroundCamera);
 
-                        recyclerViewDisappear(mRecyclerViewBackground);
+                        recyclerViewDisappear(mRecyclerViewBackground, tbtnBackground);
 
                     }
 
@@ -975,7 +980,7 @@ public class CreateNew extends AppCompatActivity {
                         /** Set the Toggle button "tbtnText" to unchecked  **/
                         setToggleButtonToUnchecked(tbtnBackgroundOnline);
 
-                        recyclerViewDisappear(mRecyclerViewBackground);
+                        recyclerViewDisappear(mRecyclerViewBackground, tbtnBackground);
 
                     }
 
@@ -1104,6 +1109,7 @@ public class CreateNew extends AppCompatActivity {
                             tbtnTextColour.setChecked(false);
                             tbtnTextTexture.setChecked(false);
                             tbtnTextEffects.setChecked(false);
+
                         }
 
                         if (menuBackgrounds.getVisibility() == View.VISIBLE) {
@@ -1204,10 +1210,9 @@ public class CreateNew extends AppCompatActivity {
                         tbtnBackgroundCamera.setOnClickListener(null);
                         tbtnBackgroundOnline.setOnClickListener(null);
 
-
                         toggleButtonChecked(mRecyclerViewFonts, tbtnText);
 
-                        recyclerViewDisappear(mRecyclerViewBackground);
+                        recyclerViewDisappear(mRecyclerViewBackground, tbtnBackground);
                     }
 
                     break;
@@ -1257,7 +1262,7 @@ public class CreateNew extends AppCompatActivity {
 
                         tbtnText.setTypeface(RalewayMedium);
                         tbtnText.setTextColor(getResources().getColor(R.color.white_transparent_80));
-                        tbtnText.setBackgroundColor(getResources().getColor(R.color.textButtonOff));
+                        tbtnText.setBackgroundColor(getResources().getColor(R.color.menuButtonOff));
                         tbtnText.setChecked(false);
 
 

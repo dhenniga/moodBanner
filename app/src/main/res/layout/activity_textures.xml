@@ -7,7 +7,7 @@
     cardview:cardElevation="0dp"
     cardview:cardCornerRadius="0dp"
 
-    cardview:cardBackgroundColor="@color/black"
+    cardview:cardBackgroundColor="@color/menuButtonOff"
     android:id="@+id/card_view">
 
     <ImageView
