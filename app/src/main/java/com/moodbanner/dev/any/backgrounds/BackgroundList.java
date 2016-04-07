@@ -1,4 +1,4 @@
-package com.moodbanner.dev.any.Backgrounds;
+package com.moodbanner.dev.any.backgrounds;
 
 import android.app.Activity;
 import android.content.Context;

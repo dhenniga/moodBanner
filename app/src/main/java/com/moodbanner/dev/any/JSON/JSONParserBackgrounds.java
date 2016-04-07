@@ -1,6 +1,6 @@
 package com.moodbanner.dev.any.JSON;
 
-import com.moodbanner.dev.any.Backgrounds.ValueBackground;
+import com.moodbanner.dev.any.backgrounds.ValueBackground;
 
 import org.json.JSONArray;
 import org.json.JSONException;
