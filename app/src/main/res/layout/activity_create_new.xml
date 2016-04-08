@@ -160,6 +160,7 @@
         android:id="@+id/seekbarHeightContainer"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:layout_weight="1">
 
 
@@ -167,18 +168,18 @@
             android:id="@+id/sbHeight"
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:layout_above="@+id/txtHeight"
             android:progress="100"
             android:max="200"/>
 
         <TextView
             android:id="@+id/txtHeight"
-            android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
             android:text="Height"
-            android:textColor="#99ffffff"
-            android:layout_alignParentBottom="true"
+            android:layout_marginTop="-7dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="#44ffffff"
+            android:layout_below="@+id/sbHeight"
             android:textSize="8dp"
             android:textAllCaps="true"
             android:gravity="center_horizontal"/>
@@ -191,27 +192,30 @@
             android:id="@+id/seekbarSizeContainer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/txtSize"
-                android:layout_width="match_parent"
-                android:layout_height="15dp"
-                android:layout_marginTop="5dp"
-                android:text="Size"
-                android:textColor="#99ffffff"
-                android:layout_alignParentBottom="true"
-                android:textSize="8dp"
-                android:textAllCaps="true"
-                android:gravity="center_horizontal"/>
 
             <SeekBar
                 android:id="@+id/sbSize"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
+                android:progress="100"
                 android:max="200"
-                android:layout_above="@+id/txtSize"
                 />
+
+            <TextView
+                android:id="@+id/txtSize"
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:text="Size"
+                android:layout_marginTop="-7dp"
+                android:layout_marginLeft="15dp"
+                android:textColor="#44ffffff"
+                android:layout_below="@+id/sbSize"
+                android:textSize="8dp"
+                android:textAllCaps="true"
+                android:gravity="center_horizontal"/>
 
         </RelativeLayout>
 
@@ -235,27 +239,30 @@
             android:id="@+id/seekbarWidthContainer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/txtWidth"
-                android:layout_width="match_parent"
-                android:layout_height="15dp"
-                android:layout_marginTop="5dp"
-                android:text="Width"
-                android:textColor="#99ffffff"
-                android:layout_alignParentBottom="true"
-                android:textSize="8dp"
-                android:textAllCaps="true"
-                android:gravity="center_horizontal"/>
 
             <SeekBar
                 android:id="@+id/sbWidth"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
+                android:progress="1000"
                 android:max="2000"
-                android:layout_above="@+id/txtWidth"
                 />
+
+            <TextView
+                android:id="@+id/txtWidth"
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_marginTop="-7dp"
+                android:layout_marginLeft="15dp"
+                android:text="Width"
+                android:textColor="#44ffffff"
+                android:layout_below="@+id/sbWidth"
+                android:textSize="8dp"
+                android:textAllCaps="true"
+                android:gravity="center_horizontal"/>
+
 
         </RelativeLayout>
 
@@ -263,6 +270,7 @@
             android:id="@+id/seekbarAlphaContainer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:layout_weight="1">
 
 
@@ -270,18 +278,18 @@
                 android:id="@+id/sbAlpha"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
-                android:layout_above="@+id/txtAlpha"
                 android:progress="100"
                 android:max="100"/>
 
             <TextView
                 android:id="@+id/txtAlpha"
-                android:layout_width="match_parent"
-                android:layout_height="15dp"
-                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_marginTop="-7dp"
+                android:layout_marginLeft="15dp"
                 android:text="Opacity"
-                android:textColor="#99ffffff"
-                android:layout_alignParentBottom="true"
+                android:textColor="#44ffffff"
+                android:layout_below="@+id/sbAlpha"
                 android:textSize="8dp"
                 android:textAllCaps="true"
                 android:gravity="center_horizontal"/>
@@ -325,6 +333,7 @@
             android:textColor="@color/white"
             android:text="This is some testing text"
             android:lineSpacingExtra="-30dp"
+            android:layout_centerInParent="true"
             android:hint="This is some testing text"
             android:textColorHint="@color/white"
             />

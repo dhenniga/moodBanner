@@ -245,10 +245,10 @@ public class CreateNew extends AppCompatActivity {
 
 
         /** SeekBar Description Text fonts  **/
-        txtWidth.setTypeface(RalewayLight);
-        txtSize.setTypeface(RalewayLight);
-        txtHeight.setTypeface(RalewayLight);
-        txtAlpha.setTypeface(RalewayLight);
+        txtWidth.setTypeface(RalewayMedium);
+        txtSize.setTypeface(RalewayMedium);
+        txtHeight.setTypeface(RalewayMedium);
+        txtAlpha.setTypeface(RalewayMedium);
 
         tbtnShowHideUI.setTypeface(RalewayMedium);
 
@@ -299,15 +299,24 @@ public class CreateNew extends AppCompatActivity {
         TextureGallery();
 
         /**  Setup the SeekBar Controllers **/
+
+        /**  Setup the "Height" controller and set text to starter value  **/
         SeekBarController seekBarHeightController = new SeekBarController();
         seekBarHeightController.seekBarMethod(seekBarHeight, txtMainText);
+        float startProgress = Float.valueOf(seekBarHeight.getProgress());
+        txtMainText.setLineSpacing(startProgress, 0.4f);
 
+        /**  Setup the "Size" controller and set text to starter value  **/
         SeekBarController seekBarSizeController = new SeekBarController();
         seekBarSizeController.seekBarMethod(seekBarSize, txtMainText);
+        txtMainText.setTextSize(seekBarSize.getProgress());
 
+        /**  Setup the "Width" controller and set text to starter value  **/
         SeekBarController seekBarWidthController = new SeekBarController();
         seekBarWidthController.seekBarMethod(seekBarWidth, txtMainText);
+        txtMainText.setWidth(seekBarWidth.getProgress());
 
+        /**  Setup the "Alpha" controller and set text to starter value  **/
         SeekBarController seekBarAlphaController = new SeekBarController();
         seekBarAlphaController.seekBarMethod(seekBarAlpha, txtMainText);
 
@@ -381,6 +390,22 @@ public class CreateNew extends AppCompatActivity {
 //    }
 
 
+    private void tbtnEnable (RecyclerView recyclerView, ToggleButton toggleButton) {
+
+
+        //  Show the recyclerView
+        recyclerViewAppear(recyclerView);
+
+        // set the toggle button to "on"
+        setToggleButtonToChecked(toggleButton);
+
+        // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
+//        recyclerViewDisappear(mRecyclerViewBackground);
+//        recyclerViewDisappear(mRecyclerViewTextColours);
+//        recyclerViewDisappear(mRecyclerViewTexture);
+
+    }
+
 
     View.OnClickListener listenerText = new View.OnClickListener() {
         @Override
@@ -391,6 +416,8 @@ public class CreateNew extends AppCompatActivity {
 
                     if (tbtnTextFont.isChecked()) {
 
+                        Log.i("Button Press", "Menu Open - Font");
+
                         mRecyclerViewFonts = (RecyclerView) findViewById(R.id.recyclerViewFonts);
                         LinearLayoutManager llmFont = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
 
@@ -399,18 +426,8 @@ public class CreateNew extends AppCompatActivity {
                         mRecyclerViewFonts.setAdapter(adapterFont);
                         mRecyclerViewFonts.setLayoutManager(llmFont);
 
-                        Log.i("Button Press", "Menu Open - Font");
-
-                        //  Show the recyclerView for the Text | Fonts selection
-                        recyclerViewAppear(mRecyclerViewFonts);
-
-                        // set the "Font" toggle button to "on"
-                        setToggleButtonToChecked(tbtnTextFont);
-
-                        // check of the any of the other toggle button is "on" and set them to off, removing the relevant recyclerView
-                        recyclerViewDisappear(mRecyclerViewBackground);
-                        recyclerViewDisappear(mRecyclerViewTextColours);
-                        recyclerViewDisappear(mRecyclerViewTexture);
+                        /**  Toggle the Menus  **/
+                        tbtnEnable(mRecyclerViewFonts, tbtnTextFont);
 
                     } else {
 
@@ -965,7 +982,8 @@ public class CreateNew extends AppCompatActivity {
 
         if (toggleButton.getVisibility() == View.VISIBLE) {
 
-            toggleButton.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
+            Animation slide_down_out = AnimationUtils.loadAnimation(this, R.anim.slide_down_out);
+            toggleButton.startAnimation(slide_down_out);
             toggleButton.setVisibility(View.GONE);
             setToggleButtonToUnchecked(toggleButton);
 
@@ -976,16 +994,9 @@ public class CreateNew extends AppCompatActivity {
 
         if (toggleButton.getVisibility() != View.VISIBLE) {
 
-
             toggleButton.setVisibility(View.VISIBLE);
-            Animation animation = AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in);
-            animation.setDuration(1000);
-            animation.setStartOffset(100);
-
-            toggleButton.startAnimation(animation);
-
-//        toggleButton.setVisibility(View.VISIBLE);
-//        toggleButton.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
+            Animation slide_up_in = AnimationUtils.loadAnimation(this, R.anim.slide_up_in);
+            toggleButton.startAnimation(slide_up_in);
 
         }
 
@@ -995,8 +1006,10 @@ public class CreateNew extends AppCompatActivity {
 
         if (button.getVisibility() == View.VISIBLE) {
 
-            button.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_down_out));
+            Animation slide_down_out = AnimationUtils.loadAnimation(this, R.anim.slide_down_out);
+            button.startAnimation(slide_down_out);
             button.setVisibility(View.GONE);
+
         }
     }
 
@@ -1005,7 +1018,9 @@ public class CreateNew extends AppCompatActivity {
         if (button.getVisibility() != View.VISIBLE) {
 
             button.setVisibility(View.VISIBLE);
-            button.startAnimation(AnimationUtils.loadAnimation(CreateNew.this, R.anim.slide_up_in));
+            Animation slide_up_in = AnimationUtils.loadAnimation(this, R.anim.slide_up_in);
+            button.startAnimation(slide_up_in);
+
         }
     }
 
@@ -1154,6 +1169,11 @@ public class CreateNew extends AppCompatActivity {
                         setToggleButtonToUnchecked(tbtnBackgroundStandard);
                         setToggleButtonToUnchecked(tbtnBackgroundCamera);
                         setToggleButtonToUnchecked(tbtnBackgroundOnline);
+
+                        setToggleButtonToUnchecked(tbtnTextFont);
+                        setToggleButtonToUnchecked(tbtnTextColour);
+                        setToggleButtonToUnchecked(tbtnTextTexture);
+                        setToggleButtonToUnchecked(tbtnText);
 
                         /**  Display the "Text" submenu  **/
                         menuBackgrounds.setVisibility(View.VISIBLE);
