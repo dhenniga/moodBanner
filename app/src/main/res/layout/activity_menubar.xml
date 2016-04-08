@@ -129,6 +129,7 @@
         android:background="@color/menuButtonOff"
         android:textOn="Text"
         android:textOff="Text"
+        android:visibility="gone"
         android:textSize="10sp"
         android:textColor="#66ffffff" />
 
@@ -141,6 +142,7 @@
         android:background="@color/menuButtonOff"
         android:textOn="Background"
         android:textOff="Background"
+        android:visibility="gone"
         android:textSize="10sp"
         android:textColor="#66ffffff"/>
 
@@ -153,6 +155,7 @@
         android:background="@color/menuButtonOff"
         android:textOn="Border"
         android:textOff="Border"
+        android:visibility="gone"
         android:textSize="10sp"
         android:textColor="#22ffffff" />
 
@@ -165,6 +168,7 @@
         android:background="@color/menuButtonOff"
         android:textOn="Overlay"
         android:textOff="Overlay"
+        android:visibility="gone"
         android:textSize="10sp"
         android:textColor="#22ffffff" />
 
@@ -177,6 +181,7 @@
         android:background="@color/menuButtonOff"
         android:textOn="Share"
         android:textOff="Share"
+        android:visibility="gone"
         android:textSize="10sp"
         android:textColor="#22ffffff" />
 </LinearLayout>

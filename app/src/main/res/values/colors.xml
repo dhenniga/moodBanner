@@ -31,11 +31,20 @@
     <color name="white_transparent_80">#66ffffff</color>
 
     <color name="buttonOnWhite">#ffffff</color>
-
     <color name="buttonOnBlack">#000000</color>
+
     <color name="buttonOffWhite">#bbffffff</color>
 
     <color name="menuButtonOn">#99ffffff</color>
     <color name="menuButtonOff">#99000000</color>
+
+
+
+
+    <color name="toggleButtonText_On">#000000</color>
+    <color name="toggleButtonBackground_On">#99ffffff</color>
+
+    <color name="toggleButtonText_Off">#66ffffff</color>
+    <color name="toggleButtonBackground_Off">#99000000</color>
 
 </resources>
